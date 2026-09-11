@@ -1020,12 +1020,11 @@ window.__columnManagerRowModel = () => {
 
 // The Properties sheet's visual-parity lane clauses: zero checkboxes in the row, a
 // trailing eye/eye-slash toggle as each row's last child, the required column's toggle carrying a
-// measurably lower opacity than an enabled row's, the shown/hidden partition drawing onto cards
-// distinct from the sheet canvas, and the add-property row sharing that same card background.
-// Measured off the real mounted sheet, the fixture's one-hidden-column state (L4 measures the
-// two-card branch this state exercises; the zero-hidden, one-card, no-heading branch is the same
-// \`renderSection\` call with a null title and is not separately fixture-able here — see
-// verification.md for how that branch was checked instead).
+// measurably lower opacity than an enabled row's, the shown/hidden partition drawn as headings on
+// the sheet's own surface, and the add-property row sitting on that same surface. Measured off the
+// real mounted sheet, the fixture's one-hidden-column state (L4 measures the two-group branch this
+// state exercises, where a group boundary exists; the zero-hidden, single-group branch is the same
+// \`renderSection\` call with a null title, and a single group draws no boundary).
 window.__propertiesVisualParityGrammar = () => {
   const SCENARIO = ${JSON.stringify(REGISTERED_SURFACES.find((s) => s.name === "column-manager").spec)};
   const out = {
@@ -1053,19 +1052,61 @@ window.__propertiesVisualParityGrammar = () => {
           disabled: eye ? eye.disabled : null,
           opacity: eye ? Number.parseFloat(getComputedStyle(eye).opacity) : null,
           heightPx: Math.round(row.getBoundingClientRect().height * 10) / 10,
+          background: getComputedStyle(row).backgroundColor,
         };
       });
-      const sectionEls = Array.from(sheet.querySelectorAll(".obnotion-column-manager-section"));
-      out.sections = sectionEls.map((section) => {
-        const style = getComputedStyle(section);
+      const sheetBox = sheet.getBoundingClientRect();
+      const sheetBoxStyle = getComputedStyle(sheet);
+      const contentLeft = sheetBox.left + (Number.parseFloat(sheetBoxStyle.borderLeftWidth) || 0);
+      const contentRight = sheetBox.right - (Number.parseFloat(sheetBoxStyle.borderRightWidth) || 0);
+      // A group boundary on this sheet is a hairline, not a container. So the two facts that
+      // decide it are measured together: the surface the group paints, which must be the sheet's
+      // own, and the leading hairline the group draws, which must be real paint, inset at the
+      // leading edge and flush at the trailing edge.
+      const readSurface = (el) => {
+        const style = getComputedStyle(el);
         return {
           background: style.backgroundColor,
           borderRadiusPx: Number.parseFloat(style.borderRadius) || 0,
-          hasHeading: Boolean(section.querySelector(".obnotion-column-manager-section-title")),
+          boxShadow: style.boxShadow,
         };
-      });
+      };
+      const readLeadingHairline = (el) => {
+        const div = getComputedStyle(el, "::before");
+        const box = el.getBoundingClientRect();
+        if (div.content === "none") {
+          return { content: div.content, heightPx: 0, color: div.backgroundColor, leftInsetPx: null, rightGapPx: null };
+        }
+        const left = Number.parseFloat(div.left) || 0;
+        const right = Number.parseFloat(div.right) || 0;
+        return {
+          content: div.content,
+          heightPx: Number.parseFloat(div.height) || 0,
+          color: div.backgroundColor,
+          leftInsetPx: Math.round((box.left + left - contentLeft) * 10) / 10,
+          rightGapPx: Math.round((contentRight - (box.right - right)) * 10) / 10,
+        };
+      };
+      const readLabelInset = (group) => {
+        const label = group.querySelector(".obnotion-column-manager-section-title")
+          || group.querySelector(".obnotion-column-manager-add-button");
+        return label ? Math.round((label.getBoundingClientRect().left - contentLeft) * 10) / 10 : null;
+      };
+      // The sheet's own hairline paint, read off the seam its search row already draws. A group
+      // boundary is the same kind of line as that seam, so the clause holds it to that paint
+      // rather than to a second, fainter mix.
+      const searchRow = sheet.querySelector(".obnotion-column-manager-search-row");
+      out.hairline = searchRow ? getComputedStyle(searchRow).borderBottomColor : null;
+      const sectionEls = Array.from(sheet.querySelectorAll(".obnotion-column-manager-section"));
+      out.sections = sectionEls.map((section) => ({
+        ...readSurface(section),
+        hasHeading: Boolean(section.querySelector(".obnotion-column-manager-section-title")),
+        labelInsetPx: readLabelInset(section),
+        divider: readLeadingHairline(section),
+      }));
       out.sectionCount = out.sections.length;
       const addRow = sheet.querySelector(".obnotion-column-manager-add-row");
+      out.addRow = addRow ? { ...readSurface(addRow), divider: readLeadingHairline(addRow) } : null;
       out.addRowBackground = addRow ? getComputedStyle(addRow).backgroundColor : null;
       // The judged photograph clips at the phone viewport, so whatever the sheet grows past the
       // viewport's own height the picture never shows. The frame facts read here in the sheet's
@@ -1079,6 +1120,14 @@ window.__propertiesVisualParityGrammar = () => {
         sectionBottoms: sectionEls.map((section) => Math.round(section.getBoundingClientRect().bottom * 10) / 10),
         addRowBottom: addRow ? Math.round(addRow.getBoundingClientRect().bottom * 10) / 10 : 0,
         sectionBackgrounds: sectionEls.map((section) => getComputedStyle(section).backgroundColor),
+        sectionSurfaces: sectionEls.map((section) => readSurface(section)),
+        sectionDividers: sectionEls.map((section) => readLeadingHairline(section)),
+        sectionLabelInsets: sectionEls.map((section) => readLabelInset(section)),
+        sectionDividerColors: sectionEls.map((section) => readLeadingHairline(section).color),
+        sheetHairlineColor: searchRow ? getComputedStyle(searchRow).borderBottomColor : null,
+        rowBackgrounds: Array.from(sheet.querySelectorAll(".obnotion-column-manager-row")).map((row) => getComputedStyle(row).backgroundColor),
+        addRowSurface: addRow ? readSurface(addRow) : null,
+        addRowDivider: addRow ? readLeadingHairline(addRow) : null,
         addRowBackground: addRow ? getComputedStyle(addRow).backgroundColor : null,
         canvasBackground: getComputedStyle(sheet).backgroundColor,
       });
@@ -2171,6 +2220,7 @@ window.__sheetSectionDividerGrammar = (scenario) => {
     };
     result = {
       mounted: true,
+      sheetInset: Number.parseFloat(sheetStyle.getPropertyValue("--obnotion-sheet-inset")) || null,
       headerBoundary: readBoundary(sheet.querySelector(":scope > .obnotion-panel-header"), null),
       searchBoundary: readBoundary(sheet.querySelector(".obnotion-column-manager-search-row"), null),
       addBoundary: readBoundary(sheet.querySelector(".obnotion-column-manager-add-row"), "::before"),
@@ -2180,14 +2230,14 @@ window.__sheetSectionDividerGrammar = (scenario) => {
 };
 
 // The control: the injected override kills every hairline this section asserts (the two
-// section-boundary borders; the add-action seam is a card gap now, asserted separately below, not
-// part of this toggle), the lane must read them all gone, and removing the override must restore
-// them — proving the assertions measure the shipped rules rather than happening to agree with them.
+// section-boundary borders and the add-action seam), the lane must read them all gone, and removing
+// the override must restore them — proving the assertions measure the shipped rules rather than
+// happening to agree with them.
 window.__sheetDividerInsetControl = (scenario, kind) => {
   const style = document.createElement("style");
   style.textContent = kind === "rows"
     ? ".obnotion-filter-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row::before, .obnotion-sort-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row::before, .obnotion-group-popover.obnotion-mobile-bottom-sheet .obnotion-panel-row::before { content: none !important; }"
-    : ".obnotion-column-manager.obnotion-mobile-bottom-sheet > .obnotion-panel-header, .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-search-row { border-bottom: 0 !important; }";
+    : ".obnotion-column-manager.obnotion-mobile-bottom-sheet > .obnotion-panel-header, .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-search-row { border-bottom: 0 !important; } .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-add-row::before { content: none !important; }";
   const measure = kind === "rows"
     ? (nextScenario) => window.__sheetDividerInsetRows(nextScenario)
     : (nextScenario) => window.__sheetSectionDividerGrammar(nextScenario);
@@ -4025,8 +4075,8 @@ try {
   }
   console.log("");
 
-  // The Properties sheet's checkbox-to-eye row shell and its card grouping.
-  console.log("sheet-grammar: Properties sheet visual parity (076/002) — 0 checkboxes, a trailing eye per row, a dimmer eye on the required column, cards distinct from canvas, a 44px row floor, a carded add-property row\n");
+  // The Properties sheet's checkbox-to-eye row shell and its plain-surface grouping.
+  console.log("sheet-grammar: Properties sheet visual parity (076/002) — 0 checkboxes, a trailing eye per row, a dimmer eye on the required column, groups on the plain sheet with a hairline boundary, a 44px row floor, an add-property row on that same surface\n");
   const propertiesParity = await page.evaluate(() => window.__propertiesVisualParityGrammar());
   if (propertiesParity.error) {
     failures.push(`Properties sheet visual parity: ${propertiesParity.error}`);
@@ -4060,13 +4110,80 @@ try {
     if (wrongContrast.length > 0) failures.push(`Properties sheet visual parity (L3): ${wrongContrast.length} required-column eye(s) do not compute a lower opacity than an enabled row's (${JSON.stringify(wrongContrast)})`);
     console.log(`  ${l3Pass ? "PASS" : "FAIL"}  L3 — required-column eye opacity ${JSON.stringify(disabledRows.map((row) => row.opacity))} vs enabled-row ceiling ${maxEnabledOpacity} (${disabledRows.length} required of ${propertiesParity.rows.length} rows)`);
 
-    // L4 — the shown/hidden partition draws onto cards distinct from the sheet canvas, each with
-    // >= 8px radius; the fixture's one-hidden-column state exercises the 2-card branch.
-    const wrongCards = propertiesParity.sections.filter((section) => section.background === propertiesParity.canvasBackground || section.borderRadiusPx < 8);
-    const l4Pass = propertiesParity.sectionCount === 2 && wrongCards.length === 0;
-    if (propertiesParity.sectionCount !== 2) failures.push(`Properties sheet visual parity (L4): ${propertiesParity.sectionCount} section container(s) rendered with one column hidden, wanted 2`);
-    if (wrongCards.length > 0) failures.push(`Properties sheet visual parity (L4): ${wrongCards.length} of ${propertiesParity.sectionCount} section(s) do not read as a card (background ${JSON.stringify(wrongCards.map((s) => s.background))} vs canvas ${propertiesParity.canvasBackground}, or radius < 8px)`);
-    console.log(`  ${l4Pass ? "PASS" : "FAIL"}  L4 — ${propertiesParity.sectionCount} section container(s), ${propertiesParity.sectionCount - wrongCards.length} carrying a card background distinct from the canvas (${propertiesParity.canvasBackground}) at >= 8px radius`);
+    // L4 — the plain-sheet premise for the shown/hidden partition: two groups, told apart by their
+    // own headings and one hairline divider, never by a container. Every group must paint the
+    // sheet's own surface — no fill distinct from the canvas, no radius, no shadow — and the second
+    // group's leading hairline must be real paint in both themes, inset at its leading edge to the
+    // label it follows and flush at its trailing edge.
+    const isClearFill = (colour) => colour == null || colour === "transparent" || colour === "rgba(0, 0, 0, 0)" || colour === "rgba(0,0,0,0)";
+    const paintsSheetSurface = (surface, canvas) => Boolean(surface)
+      && (isClearFill(surface.background) || surface.background === canvas)
+      && surface.borderRadiusPx === 0
+      && (!surface.boxShadow || surface.boxShadow === "none");
+    // A hairline that only divides content is not a functional border, so it is not held to the 3:1
+    // non-text minimum: what it must do is read as visible paint in the theme it is drawn on. The
+    // step below is measured off the composited result, because a low-alpha neutral's computed
+    // colour is the neutral, not what the sheet shows; the engines here serialise a colour either
+    // as rgb()/rgba() or as color(srgb ...), so both forms are read.
+    const channelDelta = (colour, canvas) => {
+      const read = (value) => {
+        if (!value || !value.includes("(")) return null;
+        const inner = value.slice(value.indexOf("(") + 1, value.lastIndexOf(")")).trim();
+        const srgb = inner.toLowerCase().startsWith("srgb");
+        const parts = (srgb ? inner.slice(4) : inner).split(/[,/\s]+/).filter((part) => part.length > 0).map((part) => Number.parseFloat(part));
+        if (parts.length < 3 || parts.slice(0, 3).some((part) => Number.isNaN(part))) return null;
+        const scale = srgb ? 255 : 1;
+        return {
+          r: parts[0] * scale,
+          g: parts[1] * scale,
+          b: parts[2] * scale,
+          a: parts.length > 3 && !Number.isNaN(parts[3]) ? parts[3] : 1,
+        };
+      };
+      const fg = read(colour);
+      const bg = read(canvas);
+      if (!fg || !bg || !(fg.a > 0)) return 0;
+      const over = (top, bottom) => top * fg.a + bottom * (1 - fg.a);
+      return Math.max(Math.abs(over(fg.r, bg.r) - bg.r), Math.abs(over(fg.g, bg.g) - bg.g), Math.abs(over(fg.b, bg.b) - bg.b));
+    };
+    const DIVIDER_MIN_CHANNEL_DELTA = 1;
+    // The magnitude floor is deliberately tiny: this lane's own canvas sits lighter than the theme
+    // the capture is judged in, which compresses any hairline's step. What carries "visible in the
+    // judged theme" is the check after it — the boundary must be painted with the sheet's own
+    // hairline paint, the same mix the seam above the row list already uses, which the judged host
+    // model resolves to a 13.6/255 step on the light sheet and an 11.2/255 step on the dark one.
+    const dividerProblem = (divider, canvas, labelInset, hairline) => {
+      if (!divider) return "no divider measured";
+      if (divider.content === "none") return "no divider drawn";
+      if (divider.heightPx < 1) return "divider height " + divider.heightPx + "px";
+      const delta = channelDelta(divider.color, canvas);
+      if (delta === null ? divider.color === canvas : delta < DIVIDER_MIN_CHANNEL_DELTA) return "divider paint " + divider.color + " reads as the canvas " + canvas;
+      if (hairline && divider.color !== hairline) return "divider paint " + divider.color + " is not the sheet's own hairline paint (" + hairline + ")";
+      if (labelInset != null && divider.leftInsetPx != null && Math.abs(divider.leftInsetPx - labelInset) > 1.5) return "divider leading edge " + divider.leftInsetPx + "px vs label " + labelInset + "px";
+      if (divider.rightGapPx != null && Math.abs(divider.rightGapPx) > 1) return "divider trailing edge " + divider.rightGapPx + "px off the sheet edge";
+      return null;
+    };
+    const themedFrames = [["dark", propertiesParity.frameDark], ["light", propertiesParity.frameLight]].filter((pair) => pair[1]);
+    const sectionContainers = propertiesParity.sections.filter((section) => !paintsSheetSurface(section, propertiesParity.canvasBackground));
+    const boundaryProblems = themedFrames.flatMap((pair) => {
+      const theme = pair[0];
+      const frame = pair[1];
+      if (frame.sectionDividers.length !== propertiesParity.sectionCount) {
+        return [[theme, 0, "divider count " + frame.sectionDividers.length + " for " + propertiesParity.sectionCount + " groups"]];
+      }
+      return frame.sectionDividers.slice(1)
+        .map((divider, index) => [theme, index + 1, dividerProblem(divider, frame.canvasBackground, frame.sectionLabelInsets[index + 1], frame.sheetHairlineColor)])
+        .filter((entry) => entry[2]);
+    });
+    const l4Pass = propertiesParity.sectionCount === 2
+      && sectionContainers.length === 0
+      && themedFrames.length === 2
+      && boundaryProblems.length === 0;
+    if (propertiesParity.sectionCount !== 2) failures.push(`Properties sheet visual parity (L4): ${propertiesParity.sectionCount} section group(s) rendered with one column hidden, wanted 2`);
+    if (sectionContainers.length > 0) failures.push(`Properties sheet visual parity (L4): ${sectionContainers.length} of ${propertiesParity.sectionCount} section group(s) still read as a container (${JSON.stringify(sectionContainers.map((s) => [s.background, s.borderRadiusPx, s.boxShadow]))} against canvas ${propertiesParity.canvasBackground})`);
+    if (themedFrames.length !== 2) failures.push(`Properties sheet visual parity (L4): the divider read came back for ${themedFrames.length} of 2 themes`);
+    boundaryProblems.forEach(([theme, index, problem]) => failures.push(`Properties sheet visual parity (L4): ${theme} theme, group boundary ${index}: ${problem}`));
+    console.log(`  ${l4Pass ? "PASS" : "FAIL"}  L4 — ${propertiesParity.sectionCount} section group(s), ${propertiesParity.sectionCount - sectionContainers.length} painting the plain sheet surface (canvas ${propertiesParity.canvasBackground}), ${boundaryProblems.length} boundary problem(s) across ${themedFrames.length} theme(s)`);
 
     // L5 — every row computes min-height >= 44px.
     const shortRows = propertiesParity.rows.filter((row) => row.heightPx < 44);
@@ -4074,14 +4191,24 @@ try {
     if (!l5Pass) failures.push(`Properties sheet visual parity (L5): ${shortRows.length} of ${propertiesParity.rows.length} rows compute under 44px (${JSON.stringify(shortRows.map((row) => [row.key, row.heightPx]))})`);
     console.log(`  ${l5Pass ? "PASS" : "FAIL"}  L5 — row heights ${JSON.stringify(propertiesParity.rows.map((row) => row.heightPx))}, wanted >= 44px`);
 
-    // L6 — the add-property row's own background reads distinct from the sheet canvas. A
-    // transparent fill is not "distinct" in the sense this clause means — it shows the canvas
-    // straight through — so it is rejected the same way the divider clauses reject a paintless
-    // border above.
-    const addRowIsTransparent = propertiesParity.addRowBackground === "transparent" || propertiesParity.addRowBackground === "rgba(0, 0, 0, 0)";
-    const l6Pass = propertiesParity.addRowBackground != null && !addRowIsTransparent && propertiesParity.addRowBackground !== propertiesParity.canvasBackground;
-    if (!l6Pass) failures.push(`Properties sheet visual parity (L6): the add-property row's background (${propertiesParity.addRowBackground}) does not read distinct from the canvas (${propertiesParity.canvasBackground})`);
-    console.log(`  ${l6Pass ? "PASS" : "FAIL"}  L6 — add-property row background ${propertiesParity.addRowBackground} vs canvas ${propertiesParity.canvasBackground}`);
+    // L6 — the add action and the rows themselves sit on the plain sheet, and the seam a container
+    // used to stand in for is the same hairline the sheet's other boundaries draw: no fill of its
+    // own, no radius, and a divider that reads as paint in both themes.
+    const rowFills = propertiesParity.rows.filter((row) => !isClearFill(row.background) && row.background !== propertiesParity.canvasBackground);
+    const addRowProblems = themedFrames.flatMap((pair) => {
+      const theme = pair[0];
+      const frame = pair[1];
+      const problems = [];
+      if (!paintsSheetSurface(frame.addRowSurface, frame.canvasBackground)) problems.push("surface " + JSON.stringify(frame.addRowSurface) + " against canvas " + frame.canvasBackground);
+      const divider = dividerProblem(frame.addRowDivider, frame.canvasBackground, null, frame.sheetHairlineColor);
+      if (divider) problems.push(divider);
+      return problems.map((problem) => theme + " theme: " + problem);
+    });
+    const l6Pass = propertiesParity.addRow != null && rowFills.length === 0 && addRowProblems.length === 0;
+    if (propertiesParity.addRow == null) failures.push(`Properties sheet visual parity (L6): the add-property row did not render`);
+    if (rowFills.length > 0) failures.push(`Properties sheet visual parity (L6): ${rowFills.length} of ${propertiesParity.rows.length} property row(s) paint a fill of their own (${JSON.stringify(rowFills.map((row) => [row.key, row.background]))} against canvas ${propertiesParity.canvasBackground})`);
+    addRowProblems.forEach((problem) => failures.push(`Properties sheet visual parity (L6): the add-property row, ${problem}`));
+    console.log(`  ${l6Pass ? "PASS" : "FAIL"}  L6 — add-property row on the plain sheet surface, ${rowFills.length} row(s) painting a fill of their own, ${addRowProblems.length} boundary problem(s)`);
 
     // L7 — the judged frame: the capture clips at the phone viewport, so whatever the sheet
     // grows past its own height is photographed half-shown. The sheet is measured mid-entrance
@@ -4103,36 +4230,29 @@ try {
     }
     if (!l7Pass) failures.push(`Properties sheet visual parity (L7): the sheet's grouping states do not fit the judged frame under ${judgedFrameMisses.map((pair) => pair[0]).join(" and ") || "either theme"} (frames: ${JSON.stringify(judgedFrames.map((pair) => pair[1]))})`);
 
-    // L8 — the card step, both themes: a grouped card reads as a bounded band only when its fill
-    // clears the canvas by a step the theme can actually show. Light's own reference delta is
-    // 13/255, so the floor is 12/255 in every channel, for every carded surface — the shown/hidden
-    // sections and the add-property row alike, because a section that clears the floor while the
-    // add-row sits flat photographs the same unreadable boundary.
-    const paintChannels = (value) => {
-      if (!value || value === "transparent") return null;
-      const inner = value.slice(value.indexOf("(") + 1, value.lastIndexOf(")"));
-      const withoutAlpha = value.includes("/") ? inner.slice(0, inner.indexOf("/")) : inner;
-      const parts = withoutAlpha.trim().split(/[\s,]+/);
-      const srgbForm = value.startsWith("color(");
-      return (srgbForm ? parts.slice(1, 4) : parts.slice(0, 3)).map((part) => Number(part) * (srgbForm ? 255 : 1));
-    };
-    const CARD_STEP_FLOOR = 12;
-    const cardSteps = (frame) => {
-      const canvas = paintChannels(frame.canvasBackground);
+    // L8 — the container step, both themes, now inverted: the frame ruling is that a group is a band
+    // of rows on the sheet's own surface, so nothing inside the sheet may step off the canvas. Read
+    // off the composited paint, because a clear fill shows the canvas through and therefore steps by
+    // nothing at all — which is exactly what this clause now requires of every group and of the add
+    // action, in both themes, and what catches a container re-entering either one.
+    const containerSteps = (frame) => {
+      const canvas = frame.canvasBackground;
       if (!canvas) return null;
-      const paints = frame.sectionBackgrounds.concat(frame.addRowBackground ? [frame.addRowBackground] : []);
-      return paints.map((paint) => {
-        const channels = paintChannels(paint);
-        return channels ? Math.min(...channels.map((channel, index) => Math.abs(channel - canvas[index]))) : 0;
+      const surfaces = (frame.sectionSurfaces || []).concat(frame.addRowSurface ? [frame.addRowSurface] : []);
+      return surfaces.map((surface) => {
+        const delta = channelDelta(surface.background, canvas);
+        if (delta === null) return surface.background === canvas ? 0 : Number.POSITIVE_INFINITY;
+        return delta;
       });
     };
-    const stepReads = [["dark", cardSteps(propertiesParity.frameDark)], ["light", cardSteps(propertiesParity.frameLight)]].filter((pair) => pair[1]);
-    const flatSteps = stepReads.filter((pair) => pair[1].some((step) => step < CARD_STEP_FLOOR));
-    const l8Pass = stepReads.length === 2 && flatSteps.length === 0;
+    const CONTAINER_STEP_CEILING = 1;
+    const stepReads = [["dark", containerSteps(propertiesParity.frameDark)], ["light", containerSteps(propertiesParity.frameLight)]].filter((pair) => pair[1]);
+    const steppedSurfaces = stepReads.filter((pair) => pair[1].some((step) => step > CONTAINER_STEP_CEILING));
+    const l8Pass = stepReads.length === 2 && steppedSurfaces.length === 0;
     for (const [name, steps] of stepReads) {
-      console.log(`  ${steps.every((step) => step >= CARD_STEP_FLOOR) ? "PASS" : "FAIL"}  L8 — ${name}: card-vs-canvas step ${JSON.stringify(steps)}/255, floor ${CARD_STEP_FLOOR}`);
+      console.log(`  ${steps.every((step) => step <= CONTAINER_STEP_CEILING) ? "PASS" : "FAIL"}  L8 — ${name}: surface-vs-canvas step ${JSON.stringify(steps)}/255, ceiling ${CONTAINER_STEP_CEILING}`);
     }
-    if (!l8Pass) failures.push(`Properties sheet visual parity (L8): a carded surface's fill clears the canvas by under ${CARD_STEP_FLOOR}/255 under ${flatSteps.map((pair) => pair[0]).join(" and ") || "either theme"} (steps: ${JSON.stringify(stepReads.map((pair) => [pair[0], pair[1]]))})`);
+    if (!l8Pass) failures.push(`Properties sheet visual parity (L8): a surface inside the sheet still steps off the canvas by over ${CONTAINER_STEP_CEILING}/255 under ${steppedSurfaces.map((pair) => pair[0]).join(" and ") || "either theme"} (steps: ${JSON.stringify(stepReads.map((pair) => [pair[0], pair[1]]))})`);
   }
   console.log("");
 
@@ -5182,9 +5302,10 @@ try {
     failures.push("divider-inset grammar (Properties sheet): the sheet did not mount");
     console.log("  FAIL  Properties sheet — the sheet did not mount");
   } else {
-    // The add-action seam is no longer a hairline boundary: the add-property row now sits in its
-    // own terminal card, and a card gap replaces the hairline the same way the settings
-    // sheet drops one where a heading follows its own card. Only header and search still hairline.
+    // The add-action seam is the sheet's own hairline again: the add-property row sits on the
+    // sheet's surface, so the boundary above it is drawn, inset at its leading edge to the label
+    // and flush at the trailing edge — the same grammar the row seams use, rather than the card gap
+    // a terminal card stood in for. The two section boundaries above it stay edge-to-edge.
     const boundaries = [["header", sectionReport.headerBoundary], ["search row", sectionReport.searchBoundary]];
     const absent = boundaries.filter(([, boundary]) => !boundary || !boundary.present);
     const wrongBoundaries = boundaries.filter(([, boundary]) => boundary && boundary.present
@@ -5193,12 +5314,20 @@ try {
         || Math.abs(boundary.rightGap) > 0.5
         || boundary.color === "transparent"
         || boundary.color === "rgba(0, 0, 0, 0)"));
-    const addStillHairlined = sectionReport.addBoundary && sectionReport.addBoundary.present;
+    const addBoundary = sectionReport.addBoundary;
+    const addBoundaryProblems = [];
+    if (!addBoundary || !addBoundary.present) addBoundaryProblems.push("no hairline drawn");
+    else {
+      if (Math.abs(addBoundary.height - 1) > 0.5) addBoundaryProblems.push("height " + addBoundary.height + "px");
+      if (addBoundary.color === "transparent" || addBoundary.color === "rgba(0, 0, 0, 0)") addBoundaryProblems.push("paint " + addBoundary.color);
+      if (sectionReport.sheetInset != null && Math.abs(addBoundary.leftGap - sectionReport.sheetInset) > 0.5) addBoundaryProblems.push("leading edge " + addBoundary.leftGap.toFixed(1) + "px in, wanted the sheet's own " + sectionReport.sheetInset + "px");
+      if (Math.abs(addBoundary.rightGap) > 0.5) addBoundaryProblems.push("trailing edge " + addBoundary.rightGap.toFixed(1) + "px off the sheet edge");
+    }
     if (absent.length > 0) failures.push("divider-inset grammar (Properties sheet): " + absent.length + " of 2 between-section boundaries carry no edge-to-edge hairline (" + absent.map(([name]) => name).join(", ") + ")");
     if (wrongBoundaries.length > 0) failures.push("divider-inset grammar (Properties sheet): " + wrongBoundaries.length + " of 2 between-section hairlines are not 1px, edge-to-edge and painted (first: " + wrongBoundaries[0][0] + " at height " + wrongBoundaries[0][1].height + "px, left gap " + wrongBoundaries[0][1].leftGap.toFixed(1) + "px, right gap " + wrongBoundaries[0][1].rightGap.toFixed(1) + "px)");
-    if (addStillHairlined) failures.push("divider-inset grammar (Properties sheet): the add-action boundary still draws a hairline — it should read as a card gap now that the add row sits in its own terminal card");
-    const pass = absent.length === 0 && wrongBoundaries.length === 0 && !addStillHairlined;
-    console.log("  " + (pass ? "PASS" : "FAIL") + "  Properties sheet — " + (boundaries.length - absent.length - wrongBoundaries.length) + "/2 between-section boundaries (header, search row) carry the edge-to-edge 1px hairline, and the add action reads as a card gap (no hairline: " + !addStillHairlined + ")");
+    if (addBoundaryProblems.length > 0) failures.push("divider-inset grammar (Properties sheet): the add-action boundary's hairline (" + addBoundaryProblems.join("; ") + ")");
+    const pass = absent.length === 0 && wrongBoundaries.length === 0 && addBoundaryProblems.length === 0;
+    console.log("  " + (pass ? "PASS" : "FAIL") + "  Properties sheet — " + (boundaries.length - absent.length - wrongBoundaries.length) + "/2 between-section boundaries (header, search row) carry the edge-to-edge 1px hairline, and the add-action seam draws the inset 1px hairline (" + (addBoundaryProblems.length === 0 ? "yes" : addBoundaryProblems.join("; ")) + ")");
   }
   const dividerSectionsControl = await page.evaluate((scenario) => window.__sheetDividerInsetControl(scenario, "sections"), dividerSectionsSpec);
   if (!dividerSectionsControl.broken || !dividerSectionsControl.broken.mounted || !dividerSectionsControl.fixed || !dividerSectionsControl.fixed.mounted) {
@@ -5206,17 +5335,16 @@ try {
     console.log("  FAIL  Properties-sheet divider negative control — the sheet did not mount");
   } else {
     const flat = (report) => [report.headerBoundary, report.searchBoundary];
-    const addAbsentBoth = (!dividerSectionsControl.broken.addBoundary || !dividerSectionsControl.broken.addBoundary.present)
-      && (!dividerSectionsControl.fixed.addBoundary || !dividerSectionsControl.fixed.addBoundary.present);
-    const wentRed = flat(dividerSectionsControl.broken).every((boundary) => !boundary || !boundary.present) && addAbsentBoth;
+    const addDrawn = (report) => Boolean(report.addBoundary && report.addBoundary.present);
+    const wentRed = flat(dividerSectionsControl.broken).every((boundary) => !boundary || !boundary.present) && !addDrawn(dividerSectionsControl.broken);
     const cleanAfter = flat(dividerSectionsControl.fixed).every((boundary) => boundary && boundary.present
       && Math.abs(boundary.height - 1) <= 0.5
       && Math.abs(boundary.leftGap) <= 0.5
-      && Math.abs(boundary.rightGap) <= 0.5) && addAbsentBoth;
-    if (!wentRed) failures.push("divider-inset grammar (Properties sheet) negative control: killing the boundary rules left a between-section hairline drawn, or the add-action card gap regressed to a hairline");
-    if (!cleanAfter) failures.push("divider-inset grammar (Properties sheet) negative control: removing the override left a between-section hairline missing, or the add-action card gap regressed to a hairline");
-    console.log("  " + (wentRed ? "PASS" : "FAIL") + "  killing the boundary rules leaves " + flat(dividerSectionsControl.broken).filter((boundary) => boundary && boundary.present).length + "/2 hairlines drawn (wanted 0), add action still a card gap");
-    console.log("  " + (cleanAfter ? "PASS" : "FAIL") + "  removing the override restores 2/2 between-section hairlines, add action stays a card gap");
+      && Math.abs(boundary.rightGap) <= 0.5) && addDrawn(dividerSectionsControl.fixed);
+    if (!wentRed) failures.push("divider-inset grammar (Properties sheet) negative control: killing the boundary rules left a between-section hairline, or the add-action seam, still drawn");
+    if (!cleanAfter) failures.push("divider-inset grammar (Properties sheet) negative control: removing the override did not restore both between-section hairlines and the add-action seam");
+    console.log("  " + (wentRed ? "PASS" : "FAIL") + "  killing the boundary rules leaves " + flat(dividerSectionsControl.broken).filter((boundary) => boundary && boundary.present).length + "/2 hairlines drawn (wanted 0), add seam drawn: " + addDrawn(dividerSectionsControl.broken));
+    console.log("  " + (cleanAfter ? "PASS" : "FAIL") + "  removing the override restores 2/2 between-section hairlines and the add-action seam");
   }
   console.log("");
 

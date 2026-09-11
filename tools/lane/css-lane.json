@@ -1,6 +1,6 @@
 {
   "holder": "076-002-properties-sheet-visual-parity",
-  "baselineHash": "195782fd8370",
+  "baselineHash": "41b124f19c2c",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -7508,6 +7508,35 @@
         "screenshots/notion-clone/panels/constructed-column-manager-sheet-mobile-light.png"
       ],
       "note": "npm run screenshots </dev/null twice on the composed tree, 504/504 (482 + the 298 leg's 22 judged full-sheet variant additions), exit 0 both; judged by decoded pixel delta across both runs against the committed blobs (node scratchpad/glm/pixel-delta.mjs), no image opened by eye. 2 content movers, judged, both reproduced identically in BOTH judged runs (deterministic): the two constructed-column-manager-sheet-mobile variant captures -- this leg's ten-column judged fixture (the third leg's 16-column corpus) now photographs its whole 792px sheet at the 298 leg's full-sheet variant, so the committed 80902/81824-byte 16-column captures give way to 64864/66605 at NEW pixelHashes 40e34b898b78 / 4cf1cd7af803, both grouping states, the hidden-section card, its bulk link and the add-property card inside the full-sheet frame, and the section/add-property fills carrying this leg's 85% step (18/255 dark, 12.75/255 light, grammar L8 re-read green on this tree). 1 bytes-only mover, named, judged: components/panel-base-import-modal-desktop-dark 165px@59 in BOTH runs (the same volatility the 0.0.40 verification leg recorded), pixelHash c7c8da2687f1 and layoutHash 15cecdce9f35 unchanged, 67173 -> 67266, kept. 1 one-run jitter, views/board-mobile-desktop-dark 1px@1 (run 2 only), restored at its committed 213422 with its manifest row patched (pixelHash f926f7e2f7a2 / layoutHash 83d7d7454c3c unchanged) -- the recorded 014/008/288/012 flip class. 0 threshold edits; the visual read stays the operator device pass. The composed stylesheet 195782fd8370 = 3a2f5143dd74 + this leg's 85% hunk; 001's five-card mechanism paints from its own backgrounds and 298's harness touches no pixels this leg's captures read at the fingerprint level."
+    },
+    {
+      "event": "edit",
+      "phase": "076-002-properties-sheet-visual-parity",
+      "at": "2026-09-11T07:05:00Z",
+      "hash": "41b124f19c2c",
+      "note": "iteration-3 remediation on the operator's card ruling: the shown/hidden groups and the add-property row stop painting the settings-card band (fill, radius and card margin removed, so both groups and the add action sit on the sheet's own surface) and the group boundary becomes a leading hairline on the sheet's own border token, inset to the label it follows and flush at the trailing edge; the add-action seam keeps the same hairline, now inset at its leading edge like every other row seam, instead of being suppressed behind a card boundary. Nothing else in the stylesheet moves; the lane's baselineHash is reset to this stylesheet and the captures this forces are judged under the release appended when they land."
+    },
+    {
+      "event": "release",
+      "phase": "076-002-properties-sheet-visual-parity",
+      "at": "2026-09-11T07:35:00Z",
+      "hash": "41b124f19c2c",
+      "reviewed": [
+        "screenshots/notion-clone/panels/constructed-column-manager-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-sheet-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-replaced-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-replaced-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-property-editor-stacked-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-property-editor-stacked-mobile-light.png",
+        "screenshots/notion-clone/views/board-mobile-desktop-dark.png"
+      ],
+      "note": "npm run screenshots </dev/null twice, 504/504 entries, exit 0 both, judged by decoded pixel delta across both runs against the committed blobs (scratchpad/glm/pixel-delta.mjs), no image opened by eye. 13 movers, every one reproduced with identical counts in BOTH judged runs so none is jitter: the four column-manager captures (932k px, maxDelta 176 dark / 209 light) are the judged surface itself - the shown/hidden groups and the add-property row stop painting the card band, so the fill step each row band carried is gone and the group boundary is now a hairline; the eight stacked parent-sheet captures (376k-555k px, maxDelta 112 dark / 122 light) mount the column-manager sheet as their parent beside the operator's own reported pair, so the same repaint shows around the stacked modal; board-mobile-desktop-dark 1px@1 also moved in both judged runs, kept by the lane's moved-in-both-runs rule rather than restored. Attribution proven by negative control, not inferred: with HEAD's stylesheet restored (195782fd8370) a --only recapture of constructed-modal-sheet-confirm-stacked and constructed-depth3-property-type-picker reproduced their committed blobs byte-for-byte (4/4 MATCH, shasum), so these captures moved because of this stylesheet and not because the committed bytes had drifted. views/board-view-desktop-dark moved 6px@1 in run 1 only and returned to its committed bytes on run 2, so nothing was restored and no manifest row was patched. 0 threshold edits; the visual read stays the operator device pass and the image judge."
     }
   ],
   "outstanding": [

@@ -155,27 +155,50 @@ since ruled the card container out entirely (D7, `../decision-record.md`), on th
 as T003-T008 — clause RED against the **shipped, card-grouped tree**, then the producer change, then
 GREEN.
 
-- [ ] T014 **RED.** Run the rewritten `spec.md` §13.11 clauses against the current, unchanged tree
+- [x] T014 **RED.** Run the rewritten `spec.md` §13.11 clauses against the current, unchanged tree
   and record the failing numbers: L4 ("0 containers; dividers present") reads **2 section containers
   with a card background, 0 dividers** when ≥1 column is hidden, and **1 container** when none is;
   L6 ("0 containers; dividers present") reads **1 add-property container** with a background distinct
   from canvas. Record both numbers in `verification.md` before touching the producer
-  (`tools/live/sheet-grammar.mjs`)
-- [ ] T015 **Producer change.** Remove the `.obnotion-settings-card` background/radius from
+  (`tools/live/sheet-grammar.mjs`). **Landed:** the clauses were first rewritten to the
+  divider premise, then run against the untouched tree: **L4 FAIL — 2 of 2 groups read as a
+  container (radius 8, fill 63.75 vs canvas 45.75) and no divider drawn at the group boundary in
+  either theme; L6 FAIL — the add-property row reads as a card in both themes with no divider drawn
+  at its seam; L8 FAIL — surface-vs-canvas step 18.0/255 dark, 12.75/255 light against a ceiling of
+  1/255.** All three numbers are in `verification.md` before the producer moved
+- [x] T015 **Producer change.** Remove the `.obnotion-settings-card` background/radius from
   `.obnotion-column-manager-section` and from `.obnotion-column-manager-add-row`
   (`column-manager-renderer.ts`); when ≥1 column is hidden, paint a hairline divider between the
   `Shown in table` and `Hidden in table` groups (leading-edge inset to the label, full-bleed to the
   trailing edge, the same grammar `076/001`'s remediation lands); when none is hidden, no divider is
   needed since there is only one group. Widen the row min-height target to the 44-48pt provisional
-  range alongside `076/001`'s own retune (`src/views/column-manager-renderer.ts`, `styles.css`)
-- [ ] T016 **GREEN.** Re-run L4 and L6 and record: L4 at **0** containers in both states, **1** divider
+  range alongside `076/001`'s own retune (`src/views/column-manager-renderer.ts`, `styles.css`).
+  **Landed:** the declaration is a stylesheet one — the renderer's markup needed no change — so the
+  fix is `styles.css` only: both card declarations (fill, radius, card margin) are gone from
+  `.obnotion-column-manager-section` and `.obnotion-column-manager-add-row`; the second group draws
+  its own leading hairline (`--obnotion-border-subtle`) inset at the label and flush at the trailing
+  edge, with the following element's margin carrying the space so the boundary reads as a group edge;
+  the suppressed add-action seam is restored and now leads with the same inset. Row min-height stays
+  on `--obnotion-sheet-row-min-height` at 48px (already ≥ 44; L5 green, so the 44-48pt retune is owed
+  to `076/001`'s own pass, not here)
+- [x] T016 **GREEN.** Re-run L4 and L6 and record: L4 at **0** containers in both states, **1** divider
   present when ≥1 column is hidden; L6 at **0** containers, the add-property row's background matching
   canvas. Re-run L1-L3, L5 and the `071`/board-groups regression set in the same invocation and
-  confirm they stay green (`tools/live/sheet-grammar.mjs`, `verification.md`)
+  confirm they stay green (`tools/live/sheet-grammar.mjs`, `verification.md`). **Landed:** L4 and L8 at
+  **0 containers / 0/255 step in both themes**, L6 at **0 containers, 0 boundary problems**, the group
+  boundary and the add-action seam both drawing the inset 1px hairline; L1 (0 checkboxes), L2 (10/10
+  trailing eyes), L3 (0.5 vs 1), L5 (48px), L7 (both themes fit) and the `071`/board-groups regression
+  set all green in the same invocation — `node tools/live/sheet-grammar.mjs` exit 0. The sheet's own
+  divider-inset clause and its negative control were flipped in the same pass (a card-premise
+  assertion, red the moment the card left)
 - [ ] T017 **Capture.** Run `npm run screenshots </dev/null` and `npm run screenshots:verify`; open
   the phone light and dark PNGs and confirm by eye that no card boundary remains and, where a group
   boundary exists, it is a divider. Record the pixel delta against the pre-remediation capture
-  (`screenshots/notion-clone/**`)
+  (`screenshots/notion-clone/**`). **Partially landed, deliberately not ticked:** the captures ran
+  twice (504/504, exit 0 both), `screenshots:verify` 504 current, and the decoded pixel delta across
+  both runs is recorded in `verification.md` with a byte-for-byte negative control proving the 13
+  movers belong to this change. **The by-eye read is not an agent's to claim** — these captures are
+  what the JUDGE node opens at T018
 - [ ] T018 **Judge, remediation pass.** Score the eight-row rubric (`../spec.md` §5, as rewritten for
   D7) against the new capture, same reviewer discipline as T011: **Frame** and **Sections** score
   against dividers-on-plain-background, and a card container anywhere scores **0** on Frame. Record

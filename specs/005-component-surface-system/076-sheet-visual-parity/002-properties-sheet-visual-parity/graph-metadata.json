@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Every Properties row still renders as up-arrow, down-arrow, a filled blue checkbox, a type icon and a label, on a flat canvas with zero card grouping; Notion's row is a drag affordance, a type icon, a label and a trailing eye, grouped into inset cards",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-11T04:38:35.747Z",
+    "last_save_at": "2026-09-11T05:18:19.161Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,12 +221,12 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:959e6e220aba3f82c5e80db9b08a1e68e86d65694eebc9b7ac8677c4b48b8712",
+    "source_fingerprint": "sha256:5b569d650a74e57c5fac846b3cdef7e92407f020589a9f51d0b1b2231d423893",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d0f05366feb3c37a98689371c49f97e83e05ab67d4fcd4e8afb939188648f81c",
       "plan.md": "e3369bbec2ae8195facebd3f842a4c18752a33eeb774439aa1acb41f1ed87613",
-      "tasks.md": "4e7ce64361b2155a0b8fc4897d5c9601265a809d04913172c71546f3ecc0ff3a",
+      "tasks.md": "d70624d5a9633d0b07e39d5c775437799c9d398b2404e5eea54710a4d0f83360",
       "implementation-summary.md": "ee28b3644a534da5a5903e86a40029f0685febaaca9ba45614bb9d28af985052"
     },
     "last_active_at": null

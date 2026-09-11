@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-09-11T03:31:47.857Z",
+  "measuredAt": "2026-09-11T05:20:14.167Z",
   "inputs": {
     "tools/live/render-assertions.mjs": "f8c9f739e9a3",
     "tools/live/render-assertion-harness.ts": "d700d20d1d99",
-    "styles.css": "195782fd8370",
+    "styles.css": "41b124f19c2c",
     "src/views/table-renderer.ts": "69bc5595a179",
     "src/views/board-renderer.ts": "59f6618fd206",
     "tools/bench/table-render-bench.ts": "bf0c51517e63",

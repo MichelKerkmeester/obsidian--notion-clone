@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-11: **77 phases**, **9 with nothing left**, **194 rows** waiting on a device.
+Derived 2026-09-11: **77 phases**, **9 with nothing left**, **201 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -402,7 +402,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] Operator device row recorded and left unticked
 
-## 076-sheet-visual-parity — 2/15
+## 076-sheet-visual-parity — 2/22
 
 - [ ] `001-settings-sheet-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
 - [ ] `002-properties-sheet-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
@@ -416,6 +416,13 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] `010-picker-sheets-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
 - [ ] `011-toolbar-overflow-and-column-width` — judge ≥ 14/16, no 0, twice consecutively; lane green
 - [ ] `012-board-card-fields` — judge ≥ 14/16, no 0, twice consecutively against Anytype; lane green (not one of the eleven sheets; does not gate or depend on their sequence)
+- [ ] `013-board-card-properties-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green (coverage-audit gap; independent of the eleven sheets' sequence)
+- [ ] `014-fuzzy-suggest-sheets-visual-parity` — judge ≥ 14/16, no 0, twice consecutively on the representative call site; lane green
+- [ ] `015-cell-editor-popovers-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
+- [ ] `016-view-toolbar-options-visual-parity` — judge ≥ 14/16, no 0, twice consecutively on the calendar/mini-calendar anchor surface; lane green
+- [ ] `017-utility-modal-sheets-visual-parity` — judge ≥ 14/16, no 0, twice consecutively on the representative sample; lane green
+- [ ] `018-board-visual-parity-clickup` — judge ≥ 14/16, no 0, twice consecutively against ClickUp; lane green; `012`'s and `056`'s clauses re-run unchanged
+- [ ] `019-board-card-drag-feel-clickup` — judge ≥ 14/16, no 0, twice consecutively against ClickUp, on a mid-drag capture; lane green; `069`'s clauses re-run unchanged
 - [ ] The operator re-reads the sheets and the board on their own iPhone and reports them aligned — no agent ticks this row
 
 ## Nothing left to check

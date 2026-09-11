@@ -45,6 +45,7 @@ contextType: "implementation"
 | CREATE self-score (not the JUDGE pass) | this commit | `screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png` | `constructed-column-manager-mobile-dark.png` | 1 | 2 | 2 | 2 | 2 | 2 | 1 | 1 | 13 | 0 | self-score, informal | see paragraph below |
 | **1 (JUDGE)** | `4ab094cf` | `screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png` | `constructed-column-manager-mobile-dark.png` | 1 | 1 | 2 | 2 | 2 | 2 | 0 | 1 | **11** | **1** | **fail** | `findings-1.md` |
 | **2 (remediate leg)** | `a2146136` | `screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png` | `constructed-column-manager-mobile-dark.png` | 1 (carried) | — | — | — | — | — | — | — | — | — | judge re-score owed | see Iteration 2 below |
+| **3 (remediate leg)** | this commit | `screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png` (932,005 px moved, maxDelta 209) | `constructed-column-manager-mobile-dark.png` (931,997 px moved, maxDelta 176) | 1 (carried) | — | — | — | — | — | — | — | — | — | judge re-score owed | the card findings: rows/add action inside rounded filled containers, sections grouped by card boundary, opaque fills with no hairline divider — clause RED → GREEN table below |
 
 ### Iteration 1 — JUDGE node's own pass
 
@@ -209,6 +210,84 @@ touchable icon controls and consistent typography (`interaction-craft.md` §3-5;
 
 **Total: 11/16, 2 zeros — fail.** The pass rule is 14/16 or higher with no zero, so this iteration does
 not close the child and opens remediation for Frame, Sections, and Colour.
+
+### Iteration 3 — remediation (2026-09-11), RED assertions first
+
+Judge failed iteration 2 on three rows (each < 2): **Frame** (rows + add action inside rounded filled
+containers), **Sections** (grouping by filled card boundary instead of heading + divider), **Colour**
+(opaque group fills are the dominant surface cue; hairline divider absent in both themes).
+
+T014 RED premise: L4/L6 are asserted against the **plain-sheet** premise — 0 containers with a
+background distinct from the sheet, add action flush on the sheet, and a visible hairline divider
+between the shown and hidden groups when both exist.
+
+| Clause | RED (pre-fix, card-grouped tree) | GREEN (post-fix) |
+|---|---|---|
+| L4 | FAIL — **2 of 2** section group(s) still read as a container (`color(srgb 0.25 0.25 0.25)` at radius 8px against canvas `color(srgb 0.179412 0.179412 0.179412)`); group boundary 1: **no divider drawn** in either theme | PASS — **2 of 2** section group(s) painting the plain sheet surface (no fill of their own, radius 0, no shadow), **0 boundary problems across 2 themes**: the group boundary draws a 1px hairline that reads as paint, sits inset at the leading edge to the label above it and flush at the trailing edge, in both themes |
+| L6 | FAIL — add-property row reads as a card in both themes (dark `color(srgb 0.25 0.25 0.25)` r8, light `rgb(255, 255, 255)` r8 vs canvas `color(srgb 0.95 0.95 0.95)`), **no divider drawn** at its seam in either theme; 0 of 10 rows paint a fill of their own | PASS — add-property row on the plain sheet surface in both themes, **0 of 10** rows painting a fill of their own, **0 boundary problems**: the add-action seam draws the same inset 1px hairline the sheet's row seams use, in both themes |
+
+**Design fundamentals cited (sk-design-fundamentals, loaded this iteration).** Each visual choice
+below names the fundamental it follows:
+
+- *Plain sheet surface instead of opaque group fills.* SKILL §3 (Shadows/elevation: a page takes a
+  shadow or a fill only when it sits **above** its siblings on the z-axis; the section groups are
+  peers of the rows, not raised above them) and §4 ALWAYS 2 (grouping is carried by spacing, and a
+  filled card was spending an elevation cue to say what a heading plus a divider says). Depth is a
+  scarce signal; using it on a peer group makes the whole sheet read as nested cards.
+- *Heading + hairline divider as the group cue.* §3 Hierarchy rule 3 (emphasize by de-emphasizing:
+  removing the opaque fills lets the section heading and the row labels carry the hierarchy, which
+  is where the reference's grouping actually lives) and §4 ALWAYS 2 (the space *around* a group must
+  exceed the space *within* it — the divider marks that outer boundary; the card did the opposite by
+  drawing a boundary around every row at equal strength).
+- *Divider contrast target.* §4 ALWAYS 3 — a hairline that merely divides content is explicitly the
+  case that does *not* carry the 3:1 functional-non-text requirement ("A hairline that merely
+  divides content does not"); what it must do instead is read as visible and theme-appropriate. So
+  the clause asserts a resolvable, non-transparent, ≥1px divider whose colour differs from both the
+  sheet surface and is not a full-contrast text colour — visibility, not 3:1.
+- *Row height stays on the shared sheet token* (§3 Spacing and sizing: one scale, no ad-hoc values).
+
+**L8 flipped with the frame ruling.** L8 previously required every carded surface to clear the
+canvas by ≥ 12/255 — a floor the card fills met at 18.0/255 (dark) and 12.75/255 (light). The D7
+ruling removes the card, so the clause now asserts the inverse: no surface inside the sheet may step
+off the canvas by more than 1/255. RED read **18.0/255 dark, 12.75/255 light** against the carded
+tree; GREEN reads **0/255 in both themes**.
+
+**Adjacent clause flipped in the same pass.** The `divider-inset grammar (Properties sheet)` clause
+asserted that the add-action boundary must *not* draw a hairline ("it should read as a card gap now
+that the add row sits in its own terminal card") — a card-premise assertion, not one of the judge's
+three findings, but red the moment the card left. It now asserts the seam IS drawn: 1px, painted,
+inset at the leading edge by the sheet's own `--obnotion-sheet-inset` and flush at the trailing edge,
+plus its negative control extended to kill and restore that seam. RED before the flip: 3 failures
+(`the add-action boundary still draws a hairline`, and both negative-control legs); GREEN: 0.
+
+
+**Corpus evidence.** `npm run screenshots </dev/null` ran twice, 504/504 entries, exit 0 both, and the two
+runs were judged by decoded pixel delta against the committed blobs (`scratchpad/glm/pixel-delta.mjs`), no
+image opened by eye. 13 captures moved with identical counts in BOTH runs, so none is jitter: the four
+column-manager captures (932k px, maxDelta 176 dark / 209 light — the judged surface itself) and the eight
+stacked captures whose parent sheet is this column-manager sheet (`constructed-depth3-property-type-picker`
+and its `-replaced` variant, `constructed-modal-sheet-confirm-stacked`, and
+`constructed-modal-sheet-property-editor-stacked`, mobile both themes; 376k–555k px, maxDelta 112 dark /
+122 light), plus `views/board-mobile-desktop-dark` at 1px@1, kept by the lane's moved-in-both-runs rule.
+`views/board-view-desktop-dark` moved 6px@1 in run 1 only and returned to its committed bytes on run 2, so
+nothing was restored and no manifest row was patched. Attribution is proven rather than inferred: with
+HEAD's stylesheet restored (`195782fd8370`), a `--only` recapture of two of the eight parent-sheet scenarios
+reproduced their committed blobs byte-for-byte (4/4 shasum MATCH), so those captures moved because of this
+stylesheet and not because their committed bytes had drifted. `screenshots:verify` 504 current;
+`check-lane` exit 0 at the new `baselineHash` `41b124f19c2c`, with a release naming all 12 in-scope movers.
+
+**Verification battery (this tree).** `npx tsc --noEmit` 0 · `npx vitest run` 0 (1617/1617 in 160 files) ·
+`npm run build` 0 · `node tools/live/sheet-grammar.mjs` 0 (L1–L8 green) ·
+`node tools/live/render-assertions.mjs` 0 · `node tools/storybook/verify-placement.mjs` 0 (418/420, 2 red
+for a declared reason) · `node tools/live/evidence.mjs --check-all` 0 (16/16 fresh after the 11 stale
+artefacts were re-derived by their own tools) · `npm run gate` 0 — **28 lanes green**, on a second run: the
+first run was red on `operator-list` because the phase checklists had gained rows that the generated
+checklist had never been rebuilt from, so the regenerated `operator-checklist.md` is part of this commit ·
+`scan-comments.mjs` 0 (0 artifact-id violations) · `scan-failing-values.mjs` 0.
+
+**What this iteration does not prove.** The JUDGE pass on this tree. The clauses prove the surface now
+paints the sheet's own canvas with a hairline boundary; the eight-row rubric is the judge's to re-score,
+twice consecutively, on the captures named above. The operator device row stays unticked — no agent ticks it.
 
 <!-- /ANCHOR:iterations -->
 

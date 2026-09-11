@@ -13778,44 +13778,55 @@ body.is-phone .obnotion-container .obnotion-shell-header .obnotion-panel-title {
   position: relative;
 }
 
+/* The seam before the add action, on the same leading inset the row seams use so every boundary on
+   the sheet starts where its label starts and runs to the trailing edge. */
 .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-row + .obnotion-column-manager-add-row::before,
 .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section + .obnotion-column-manager-add-row::before {
   content: "";
   position: absolute;
   top: 0;
-  left: 0;
+  left: var(--obnotion-sheet-inset);
   right: 0;
   height: 1px;
   background: var(--obnotion-border-subtle, rgba(221, 221, 221, 0.4));
 }
 
-/* The shown/hidden partition now collects onto cards, the same one-elevation-lighter-than-canvas
-   grouping the settings sheet already landed (`--obnotion-settings-card-fill` reads per theme, so
-   the dark-theme fill direction stays whatever that sheet's own defect fix eventually settles).
-   The nothing-hidden state gets the identical treatment through the same class — one undivided
-   card holding every row, no heading — so a reader never sees a flat canvas in either state. */
+/* The shown/hidden partition is two groups on the sheet's own surface: a heading, its rows, and —
+   where a second group follows — one hairline at the boundary. A group is a peer of the rows it
+   holds, not a surface raised above them, so it paints the sheet's own canvas and carries no fill,
+   radius or shadow of its own; the removed band spent an elevation cue and read as a card inside a
+   card, at a strength that made the group louder than the properties it grouped. `position:
+   relative` is what the boundary hairline below is positioned against. */
 .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section {
-  border-radius: var(--obnotion-radius-lg);
-  background: var(--obnotion-settings-card-fill);
-  margin: 0 var(--obnotion-sheet-inset) var(--obnotion-space-5);
+  position: relative;
 }
 
-/* A card boundary is its own separator; drawing the row-to-add-row hairline on top of it would cut
-   a stray line across the card's own rounded top edge. The settings sheet drops the same hairline
-   for the same reason where a heading follows one of its own cards. */
-.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section + .obnotion-column-manager-add-row::before {
-  content: none;
+/* The group boundary. Its space belongs to the group that follows — more room around a group than
+   within it is what makes the divider read as a group edge rather than a seam between two rows —
+   and the hairline then sits at that group's leading edge. Same paint and same inset grammar as the
+   sheet's own row seams: inset at the leading edge to the label it follows, flush against the
+   sheet's trailing edge, where it is the one boundary cue the reference draws. */
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section + .obnotion-column-manager-section {
+  margin-top: var(--obnotion-space-5);
 }
 
-/* The add-property row gains the identical terminal card the settings sheet's own groups use,
-   rather than sitting on bare canvas below the last section — Notion's own add-property precedent
-   (a different sheet, R-5) ends its own list the same way. */
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section + .obnotion-column-manager-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: var(--obnotion-sheet-inset);
+  right: 0;
+  height: 1px;
+  background: var(--obnotion-border-subtle, rgba(221, 221, 221, 0.4));
+}
+
+/* The add-property row sits on the sheet like every row above it, with the sheet's own hairline
+   drawing its seam instead of a terminal card; the row's top margin is what keeps that hairline a
+   group edge rather than a seam between two rows. */
 .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-add-row {
   flex-direction: column;
   align-items: stretch;
-  border-radius: var(--obnotion-radius-lg);
-  background: var(--obnotion-settings-card-fill);
-  margin: 0 var(--obnotion-sheet-inset) var(--obnotion-space-5);
+  margin: var(--obnotion-space-5) 0 var(--obnotion-space-5);
 }
 .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-add-row .obnotion-column-manager-add-button {
   box-sizing: border-box;
@@ -13830,8 +13841,8 @@ body.is-phone .obnotion-container .obnotion-shell-header .obnotion-panel-title {
 /* The shown/hidden partition: a section header line — the section's name on the left, the bulk
    action that governs exactly its own members on the right — sitting on the same 16px inset the
    sheet's rows use. Sentence case now, matching the reference's own casing rather than the record
-   sheet's uppercase; the heading sits inside the card it labels (the properties sheet never moved
-   it above the card the way the settings sheet's own headings sit). The bulk link carries its own
+   sheet's uppercase; the heading sits directly on the sheet above the rows it labels, which is what
+   makes it the group's own cue rather than a caption on a container. The bulk link carries its own
    padding so the hit area clears a thumb even though the text itself is small. */
 .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section-header {
   display: flex;

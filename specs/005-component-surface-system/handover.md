@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T06:41:00Z"
-    last_updated_by: "303-embed-076-screenshots"
-    recent_action: "076: all 19 children embed Reference images; 002 iter-2 landed b42d481a, gate 28/0"
-    next_safe_action: "JUDGE re-scores 076/002 (pass-2 owed) on b42d481a; 001/002 T014-T019 (D7-D9) owed"
+    last_updated_at: "2026-09-11T07:50:00Z"
+    last_updated_by: "295-loop-002-properties-sheet-visual-parity"
+    recent_action: "076/002 iter-3: cards off the sheet, hairline group divider; gate 28 green"
+    next_safe_action: "JUDGE re-scores 076/002 twice on this leg's SHA; T017 by-eye and T018 owed"
     blockers:
       - "Open rows past this point are operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK)"
       - "076 closes no sheet on lanes alone; the image judge is a required gate (076 D1)"
@@ -45,6 +45,35 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-11 ~07:50, `076/002-properties-sheet-visual-parity` REMEDIATE leg (iteration 3, the D7 frame ruling) — worktree `295-loop-002-properties-sheet-visual-parity`
+
+**What this leg did** — the judge's iteration-2 pass scored **11/16 with 2 zeros** and named three rows
+below 2: Frame (rows and add actions inside rounded filled containers), Sections (groups separated by
+filled card boundaries), Colour (opaque group fills dominant, the hairline divider absent in both themes).
+Each clause ran RED against the shipped card-grouped tree before the producer moved. **L4 FAIL → GREEN**:
+2 of 2 groups still read as a container (fill 63.75 on the 45.75 canvas, radius 8) with **no divider drawn**
+at the group boundary in either theme → 2 of 2 painting the plain sheet surface, 0 boundary problems across
+both themes, the boundary now a 1px hairline of the sheet's own border token inset to the label it follows
+and flush at the trailing edge. **L6 FAIL → GREEN**: the add-property row read as a card in both themes with
+no seam → plain surface, 0 of 10 rows painting a fill of their own, and the add-action seam restored as the
+same inset hairline. **L8 inverted with the ruling** (its card-step floor ≥12/255 became a ceiling ≤1/255):
+RED 18.0/255 dark and 12.75/255 light, GREEN 0/255 in both themes. The sheet's own divider-inset clause and
+its negative control carried the same card premise and were flipped in the same pass. Producer: `styles.css`
+only — the renderer's markup needed no change. Corpus: `npm run screenshots` twice (504/504, exit 0 both),
+13 movers identical in both runs — the four column-manager captures (932k px, maxDelta 176 dark / 209 light)
+and the eight stacked captures whose parent sheet is this one (376k–555k px, 112/122) — attribution proven
+by negative control rather than inferred (HEAD's stylesheet plus a `--only` recapture reproduced those
+committed blobs byte-for-byte, 4/4 shasum MATCH). `check-lane` exit 0 at the new baselineHash
+`41b124f19c2c` with a release naming all 12 in-scope movers. Battery: `tsc` 0 · `vitest` 0 (1617/1617) ·
+`build` 0 · sheet-grammar 0 · render-assertions 0 · verify-placement 0 (418/420, 2 red for a declared
+reason) · evidence 16/16 fresh · **gate 28 green** (one re-run: `operator-list` was red because the phase
+checklists had grown rows the generated checklist had never been rebuilt from — regenerated here) · both
+naming scans 0. Orchestrator `--strict` PASSED (0 errors, 2 continuity warnings); the scoped backfill
+refreshed the graph metadata and the re-validation stayed PASSED.
+
+**Owed next** — the JUDGE re-score of the eight-row rubric on this tree, twice consecutively: T017's by-eye
+read and T018 are not an agent's to claim, and the operator device row stays unticked.
 
 ### 2026-09-11 ~02:45, `076/001-settings-sheet-visual-parity` CREATE LANDED — worktree `292-loop-001-settings-sheet-visual-parity`
 
