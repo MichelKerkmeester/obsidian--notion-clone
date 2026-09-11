@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T07:50:00Z"
+    last_updated_at: "2026-09-11T07:55:00Z"
     last_updated_by: "295-loop-002-properties-sheet-visual-parity"
-    recent_action: "076/002 iter-3: cards off the sheet, hairline group divider; gate 28 green"
-    next_safe_action: "JUDGE re-scores 076/002 twice on this leg's SHA; T017 by-eye and T018 owed"
+    recent_action: "076/002 iter-3 landed+verified 2736c2cda: mutation RED->GREEN, gate 28/0, judge re-score owed"
+    next_safe_action: "JUDGE re-scores 076/002 twice on 2736c2cda; T017 by-eye and T018 owed"
     blockers:
       - "Open rows past this point are operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK)"
       - "076 closes no sheet on lanes alone; the image judge is a required gate (076 D1)"
@@ -699,6 +699,36 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-11 ~07:55, `076/002-properties-sheet-visual-parity` ITERATION-3 LANDED+VERIFIED (2736c2cda) — worktree `295-loop-002-properties-sheet-visual-parity`
+
+recent_action: "076/002 iter-3 landed+verified 2736c2cda: mutation RED->GREEN, gate 28/0, judge re-score owed"
+
+**What this verifier confirmed** — the frame-ruling remediation leg (`40d5f9d46`, rebased
+conflict-free to `867c15ca1` onto the 076/003 planning crossing `513c7879b`), then landed as
+`2736c2cda`. The named mutation re-run rather than trusted: reverting the leg's `styles.css`
+producer hunk reads the grammar RED at exactly the recorded numbers (L4 2 of 2 groups a container
+at radius 8 with no divider drawn in either theme, plus 2 boundary problems; L6 4 boundary
+problems; L8 **18.0/255** dark and **12.75/255** light against the inverted ≤1/255 ceiling), and
+restoring it reads GREEN (L4 2/2 on the plain sheet, 0 boundary problems; L6 0 fills and 0
+boundary problems; L8 0/255 in both themes). Battery all exit 0: `build`, `tsc --noEmit`, vitest
+**1617/1617** (160 files), `npm run gate` **28 green, 0 red** on its first run, the sixteen
+evidence artefacts fresh, both naming scans 0. Captures re-judged by decoded pixel delta across
+two `npm run screenshots` runs (504/504, exit 0 both): a single 1px@1 excursion
+(`views/board-mobile-desktop-dark`, the recorded self-restoring flip class) moved in one run only
+and returned to its committed blob on the second, so the corpus ends at **0 tracked diffs** and no
+release movement is owed — the stylesheet hash `41b124f19c2c` is the one the leg's own lane release
+already names. Orchestrators `--strict`: 002, the `076` parent (first RESULT) and `005` all
+`RESULT: PASSED` from the final tree, `005`'s metadata re-derived by its own backfill (the leg's
+`005` doc edits postdated the stored fingerprint) and unchanged by the roadmap edit that followed.
+Roadmap §5.A 076 figure re-certified at the final tree: `076/goal.md` = **2 ticked + 20 open = 9%
+(2/22)** — unchanged, and the row's 002 clause now carries this iteration's D7 facts and this
+verification. Nothing ticked that names the operator or a device.
+
+**Still owed, nobody's-else** — the image judge's iteration-3 pass: T017's by-eye read and T018's
+re-score of the eight-row rubric against the new capture, then the two consecutive passes T011/T012
+require on an unchanged tree (D8 still ships no `076` child before its own DONE). The operator's own
+device row stays unticked.
 
 ### 2026-09-11 ~07:08, 076/003-filter-sheet-visual-parity PLANNED — DEFINE + PLAN reconciled with D7
 
