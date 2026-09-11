@@ -41,6 +41,8 @@ import { ImageFileSuggestModal } from "./image-file-suggest-modal";
 import { openIconPickerPopover } from "./icon-picker-popover";
 import { openOptionColorPicker } from "./option-color-picker";
 import { MarkdownFileSuggestModal } from "./markdown-file-suggest-modal";
+import { FolderSuggestModal } from "./folder-suggest-modal";
+import { SettingsSubSheetModal } from "./modals/settings-sub-sheet-modal";
 import { getFilterOperatorsForColumn } from "./filter-panel-renderer";
 import { closeActiveDateValuePicker, renderDateValuePicker } from "./date-value-picker";
 import { boardCardPropertiesContext, renderBoardCardProperties } from "./board-card-properties-panel";
@@ -269,6 +271,13 @@ export interface ViewConfigPanelActions {
   readonly isDatabaseReadOnly?: boolean;
   readonly isViewReadOnly?: boolean;
   readonly appliedCounts?: { filters: number; sorts: number; hiddenProperties: number };
+  /** The settings sheet's Properties/Filters/Sorts rows are additional ways into panels a
+   *  toolbar button already opens (roadmap row 83); these hand this renderer that same
+   *  open call rather than building a second one. Undefined leaves the row inert — visible,
+   *  matching the reference's anatomy, but not a dead click on a host that never wires it. */
+  onOpenProperties?(): void;
+  onOpenFilters?(): void;
+  onOpenSorts?(): void;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -381,23 +390,35 @@ export class ViewConfigPanelRenderer {
     // the reference settings sheet separates its groups. The anchored panel keeps the continuous
     // list — a card needs the sheet's width to read as one, and a 320px popover of cards reads
     // as clutter. Sections that never render a label (the anchored panel) share the body host.
-    const openSection = (label: string | null, scope: "database" | "view" | null): HTMLElement => {
+    const openSection = (label: string | null, scope: "database" | "view" | "display" | null): HTMLElement => {
       if (label && scope) this.renderSectionTitle(body, label, scope);
       return this.asSheet ? body.createDiv({ cls: "obnotion-settings-card" }) : body;
     };
 
     let host: HTMLElement = body;
+    // C1: Name. Its own card on the sheet (`spec.md` §13.2); folded into the database section's
+    // first row everywhere else, exactly where it always rendered.
+    if (actions.database && this.asSheet) {
+      host = body.createDiv({ cls: "obnotion-settings-card" });
+      this.renderDatabaseNameRow(host, actions.database, actions);
+    }
+
+    // C2: Current database.
     if (actions.database) {
       host = openSection(t("viewConfig.databaseSection"), "database");
       if (actions.isDatabaseReadOnly) {
         host.createDiv({ cls: "obnotion-view-config-readonly-note", text: t("viewConfig.databaseReadonly") });
       }
+      if (!this.asSheet) this.renderDatabaseNameRow(host, actions.database, actions);
       this.renderDatabaseSettings(host, actions.database, actions);
     }
 
+    // C3: Current view. R11 leads (the reference's own order), then the summary rows, then the
+    // toggle — `spec.md` §13.3 R11-R16.
     host = openSection(t("viewConfig.viewSection"), "view");
-    this.renderAppliedSummaries(host, config, actions);
     this.renderViewType(host, config, actions);
+    this.renderAppliedSummaries(host, config, actions);
+    this.renderViewSourceRulesSection(host, config, actions);
     if (actions.onOpenLayoutOptions && ["chart", "calendar", "timeline"].includes(config.viewType || "")) {
       const label = config.viewType === "chart" ? t("chart.options") : config.viewType === "timeline" ? t("timeline.options") : t("calendar.options");
       const layoutOptions = host.createEl("button", {
@@ -408,7 +429,10 @@ export class ViewConfigPanelRenderer {
       layoutOptions.createSpan({ cls: "obnotion-panel-button-label", text: label });
       layoutOptions.onclick = () => actions.onOpenLayoutOptions?.(layoutOptions);
     }
-    this.renderViewSourceRulesSection(host, config, actions);
+    // Not one of the row-by-row table's 23 rows — a per-view record-icon override the DEFINE
+    // read omitted (`spec.md` §13.3 enumerates the database's own icon field as R08, not this
+    // one). Kept rather than dropped: it is live capability with nowhere else to live, so it
+    // stays in the card its subject already shares, flagged as a drift rather than silently cut.
     if (["table", "board", "gallery", "list", "calendar", "timeline"].includes(config.viewType || "table") && actions.database) {
       this.renderRecordIconSettings(host, actions.database, config, actions);
     }
@@ -426,8 +450,11 @@ export class ViewConfigPanelRenderer {
         onManagePresets: () => actions.onManageViewStatusPresets?.(),
       });
     }
+
+    // C4: Display — R17-R22, the subset each view type actually carries.
     const isCalendarTimelineView = config.viewType === "calendar" || config.viewType === "timeline";
     if (config.viewType !== "chart" && !isCalendarTimelineView) {
+      host = openSection(t("viewConfig.displaySection"), "display");
       this.renderDefaultColumnWidth(host, config, actions);
       if (config.viewType === "table") {
         this.renderSelect(host, t("viewConfig.rowDensity"), [
@@ -437,7 +464,7 @@ export class ViewConfigPanelRenderer {
         ], config.rowDensity || "default", (value) => {
           config.rowDensity = value === "compact" || value === "comfortable" ? value : undefined;
           actions.onChange(t("undo.rowDensityConfig"));
-        });
+        }, false, false, undefined, undefined, "");
         // Default off, matching the pre-existing clip behavior — an upgraded vault's tables
         // render unchanged until the reader opts in. A column's own Wrap/Clip choice (the column
         // menu) always overrides this per-view default.
@@ -459,8 +486,11 @@ export class ViewConfigPanelRenderer {
       ], config.yearDisplayMode || "always", (value) => {
         config.yearDisplayMode = value === "always" || value === "smart" || value === "never" ? value : undefined;
         actions.onChange(t("undo.yearDisplayModeConfig"));
-      });
+      }, false, false, undefined, undefined, "");
     }
+    // `host` is already the Display card here: table/gallery/list/board all satisfy the block
+    // above (only chart and calendar/timeline are excluded from both), so this never opens a
+    // second card — it adds rows to the one the block above already opened.
     if (config.viewType !== "table" && config.viewType !== "chart" && !isCalendarTimelineView) {
       this.renderTitleField(host, config, actions);
       this.renderTitleFormat(host, config, actions);
@@ -471,20 +501,15 @@ export class ViewConfigPanelRenderer {
     }
     if (config.viewType === "board") {
       this.renderBoardSettings(host, config, actions);
-      this.presentPanel(panel, anchorEl);
-      this.restoreScroll(savedScroll);
-      return;
     }
-    if (config.viewType === "calendar") {
-      this.presentPanel(panel, anchorEl);
-      this.restoreScroll(savedScroll);
-      return;
+
+    // C5: the terminal action card — R23, a chevron-less shortcut to the same manager R10's
+    // navigation row already opens.
+    if (this.asSheet && actions.database && actions.onManageStatusPresets) {
+      const footer = body.createDiv({ cls: "obnotion-settings-card obnotion-settings-card-footer" });
+      this.renderActionRow(footer, "settings-2", t("viewConfig.manageStatusPresets"), () => actions.onManageStatusPresets?.());
     }
-    if (config.viewType === "timeline") {
-      this.presentPanel(panel, anchorEl);
-      this.restoreScroll(savedScroll);
-      return;
-    }
+
     this.presentPanel(panel, anchorEl);
     this.restoreScroll(savedScroll);
   }
@@ -521,7 +546,7 @@ export class ViewConfigPanelRenderer {
     });
   }
 
-  private renderSectionTitle(panel: HTMLElement, text: string, scope: "database" | "view"): void {
+  private renderSectionTitle(panel: HTMLElement, text: string, scope: "database" | "view" | "display"): void {
     panel.createDiv({ cls: `obnotion-view-config-section-title obnotion-view-config-section-${scope}`, text, attr: { "data-scope": scope } });
   }
 
@@ -530,9 +555,12 @@ export class ViewConfigPanelRenderer {
     const sortCount = actions.appliedCounts?.sorts
       ?? ((config.sortRules || []).filter((rule) => rule.field).length || (config.sortColumn ? 1 : 0));
     const hiddenCount = actions.appliedCounts?.hiddenProperties ?? (config.hiddenColumns || []).length;
-    this.renderAppliedSummary(panel, t("viewConfig.properties"), hiddenCount, t("toolbar.noHiddenProperties"));
-    this.renderAppliedSummary(panel, t("viewConfig.filters"), filterCount, t("toolbar.noFilters"));
-    this.renderAppliedSummary(panel, t("viewConfig.sorts"), sortCount, t("toolbar.noSorts"));
+    // R12-R14: additional ways into panels a toolbar button already opens (roadmap row 83), so
+    // the row stays visible and correctly shaped whether or not the host wires the open call —
+    // an inert row is still an honest row, a dead click promising navigation is not.
+    this.renderAppliedSummary(panel, "list", t("viewConfig.properties"), hiddenCount, t("toolbar.noHiddenProperties"), actions.onOpenProperties);
+    this.renderAppliedSummary(panel, "list-filter", t("viewConfig.filters"), filterCount, t("toolbar.noFilters"), actions.onOpenFilters);
+    this.renderAppliedSummary(panel, "arrow-up-down", t("viewConfig.sorts"), sortCount, t("toolbar.noSorts"), actions.onOpenSorts);
     // Same guard renderConditionalFormatting mounts under (config.viewType !== "chart" &&
     // actions.database): a summary row promising a section that section's own guard never
     // renders would be a row with nothing behind it. The capability does not move — only its
@@ -544,29 +572,32 @@ export class ViewConfigPanelRenderer {
 
   private renderConditionalColorSummary(panel: HTMLElement, config: ViewConfig): void {
     const count = (config.conditionalFormats || []).length;
-    const row = this.renderAppliedSummary(panel, t("viewConfig.conditionalColor"), count, t("toolbar.noConditionalColors"));
-    row.createDiv({ cls: this.hintClass(), text: t("viewConfig.conditionalColorHint") });
     const open = () => {
       panel.querySelector<HTMLElement>(".obnotion-conditional-format-settings")?.scrollIntoView?.({ behavior: "smooth", block: "start" });
     };
-    row.setAttr("role", "button");
-    row.setAttr("tabindex", "0");
-    row.addClass("obnotion-view-config-row-clickable");
-    row.onclick = open;
-    row.onkeydown = (event) => {
-      if (event.key !== "Enter" && event.key !== " ") return;
-      event.preventDefault();
-      open();
-    };
+    const row = this.renderAppliedSummary(panel, "palette", t("viewConfig.conditionalColor"), count, t("toolbar.noConditionalColors"), open);
+    // A helper paragraph under a field is exactly what the reference never draws (§13.4) — kept
+    // only on the desktop panel, which this sheet-specific rule never touches.
+    if (!this.asSheet) row.createDiv({ cls: this.hintClass(), text: t("viewConfig.conditionalColorHint") });
   }
 
-  private renderAppliedSummary(panel: HTMLElement, label: string, count: number, emptyWord: string): HTMLElement {
+  private renderAppliedSummary(panel: HTMLElement, icon: string, label: string, count: number, emptyWord: string, onClick?: () => void): HTMLElement {
+    const value = count > 0 ? t("toolbar.appliedCount", { count }) : emptyWord;
+    if (this.asSheet) return this.renderNavRow(panel, icon, label, value, onClick);
     const row = panel.createDiv({ cls: this.rowClass("obnotion-view-config-summary-row") });
     row.createDiv({ cls: "obnotion-view-config-label", text: label });
-    row.createDiv({
-      cls: "obnotion-view-config-field obnotion-view-config-summary",
-      text: count > 0 ? t("toolbar.appliedCount", { count }) : emptyWord,
-    });
+    row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-summary", text: value });
+    if (onClick) {
+      row.setAttr("role", "button");
+      row.setAttr("tabindex", "0");
+      row.addClass("obnotion-view-config-row-clickable");
+      row.onclick = onClick;
+      row.onkeydown = (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        onClick();
+      };
+    }
     return row;
   }
 
@@ -601,7 +632,8 @@ export class ViewConfigPanelRenderer {
         }
         config.viewType = next;
         actions.onChange(t("undo.viewTypeConfig"));
-      }
+      },
+      false, false, undefined, undefined, "table"
     );
   }
 
@@ -614,9 +646,10 @@ export class ViewConfigPanelRenderer {
     this.renderSwitch(panel, t("viewConfig.viewSourceRules"), enabled, (value) => {
       config.viewSourceRulesEnabled = value;
       actions.onChange(t("undo.viewSourceRulesConfig"));
-    });
+    }, false, undefined, "sliders-horizontal");
     if (enabled) {
-      panel.createDiv({ cls: this.hintClass(), text: t("viewConfig.viewSourceRulesHint") });
+      // A helper paragraph under a field is exactly what the reference never draws (§13.4).
+      if (!this.asSheet) panel.createDiv({ cls: this.hintClass(), text: t("viewConfig.viewSourceRulesHint") });
       this.renderSourceRules(panel, config as unknown as DatabaseConfig, actions, actions.isDatabaseReadOnly);
     }
   }
@@ -630,31 +663,109 @@ export class ViewConfigPanelRenderer {
    *  config until "Create". */
   renderDatabaseGlobals(panel: HTMLElement, database: DatabaseConfig, actions: ViewConfigPanelActions): void {
     const readOnly = actions.isDatabaseReadOnly;
-    const syncSourceFolder = (value: string) => {
-      database.sourceFolder = value;
-    };
-    this.renderText(panel, t("viewConfig.databaseName"), database.name || "", t("settings.databaseName"), (value) => {
-      database.name = value || t("common.untitledDatabase");
-      actions.onDatabaseChange?.(t("undo.databaseNameConfig"));
-    }, readOnly, undefined, (value) => {
-      database.name = value || t("common.untitledDatabase");
-    }, "obnotion-view-config-name-field");
-    this.renderTextarea(panel, t("viewConfig.databaseDescription"), database.description || "", t("viewConfig.descriptionPlaceholder"), (value) => {
-      database.description = value || undefined;
-      actions.onDatabaseChange?.(t("undo.databaseDescriptionConfig"));
-    }, readOnly, (value) => {
-      database.description = value || undefined;
-    });
-    this.renderDatabaseCoverSetting(panel, database, actions, readOnly);
-    this.renderText(panel, t("viewConfig.sourceFolder"), database.sourceFolder || "", t("settings.sourceFolder.placeholder"), (value) => {
-      syncSourceFolder(value);
-      actions.onDatabaseChange?.(t("undo.sourceFolderConfig"));
-    }, readOnly, t("settings.sourceFolder.desc"), (value) => {
-      syncSourceFolder(value);
-    });
+    this.renderDescriptionSetting(panel, database, actions, readOnly);
+    this.renderSourceFolderSetting(panel, database, actions, readOnly);
     this.renderSourceRules(panel, database, actions, readOnly);
     this.renderNewRecordFolderSetting(panel, database, actions, readOnly);
     this.renderNewRecordTemplateSetting(panel, database, actions, readOnly);
+    this.renderDatabaseCoverSetting(panel, database, actions, readOnly);
+  }
+
+  /** R03: the same picker `renderNewRecordFolderSetting` opens, writing `sourceFolder` instead —
+   *  the reference names no helper paragraph on this control (§13.4 forbids one on the sheet
+   *  body entirely), so the desktop-only hint text stays exactly where it was and never moves
+   *  onto the row this method draws for a phone sheet. */
+  private renderSourceFolderSetting(panel: HTMLElement, database: DatabaseConfig, actions: ViewConfigPanelActions, readOnly?: boolean): void {
+    const syncSourceFolder = (value: string) => { database.sourceFolder = value; };
+    if (!this.asSheet) {
+      this.renderText(panel, t("viewConfig.sourceFolder"), database.sourceFolder || "", t("settings.sourceFolder.placeholder"), (value) => {
+        syncSourceFolder(value);
+        actions.onDatabaseChange?.(t("undo.sourceFolderConfig"));
+      }, readOnly, t("settings.sourceFolder.desc"), (value) => {
+        syncSourceFolder(value);
+      });
+      return;
+    }
+    if (readOnly) {
+      this.renderNavRow(panel, "folder", t("viewConfig.sourceFolder"), database.sourceFolder || t("common.vaultRoot"), undefined);
+      return;
+    }
+    this.renderNavRow(panel, "folder", t("viewConfig.sourceFolder"), database.sourceFolder || t("common.vaultRoot"), () => {
+      new FolderSuggestModal(actions.app, (folder) => {
+        syncSourceFolder(folder.path);
+        actions.onDatabaseChange?.(t("undo.sourceFolderConfig"));
+      }, t("settings.sourceFolder.placeholder")).open();
+    });
+  }
+
+  /** R01, the sheet's own naming card: a bordered icon chip (the reference's one deliberate
+   *  frame, pictured rather than typed) beside a borderless inline field carrying the
+   *  placeholder as its only label. Desktop and the creation modal keep the landed labelled
+   *  text row unchanged — `this.asSheet` is false on both, since neither calls `render()`
+   *  before this method. Public because `add-database-modal.ts` renders it directly, the same
+   *  way it already reaches `renderDatabaseGlobals`. */
+  renderDatabaseNameRow(panel: HTMLElement, database: DatabaseConfig, actions: ViewConfigPanelActions): void {
+    const readOnly = actions.isDatabaseReadOnly;
+    if (!this.asSheet) {
+      this.renderText(panel, t("viewConfig.databaseName"), database.name || "", t("settings.databaseName"), (value) => {
+        database.name = value || t("common.untitledDatabase");
+        actions.onDatabaseChange?.(t("undo.databaseNameConfig"));
+      }, readOnly, undefined, (value) => {
+        database.name = value || t("common.untitledDatabase");
+      }, "obnotion-view-config-name-field");
+      return;
+    }
+    const row = panel.createDiv({ cls: this.rowClass("obnotion-settings-nav-row obnotion-settings-nav-lead") });
+    const chip = row.createDiv({ cls: "obnotion-settings-nav-chip" });
+    renderRecordIcon(chip, database.icon, { defaultIcon: "database" });
+    const field = row.createDiv({ cls: "obnotion-view-config-field" });
+    if (readOnly) {
+      field.createDiv({ cls: "obnotion-view-config-readonly-value", text: database.name || t("common.untitledDatabase") });
+      return;
+    }
+    const input = field.createEl("input", {
+      cls: "obnotion-view-config-text",
+      attr: { type: "text", placeholder: t("settings.databaseName"), "aria-label": t("settings.databaseName") },
+    });
+    input.value = database.name || "";
+    input.oninput = () => { database.name = input.value.trim() || t("common.untitledDatabase"); };
+    input.onchange = () => {
+      database.name = input.value.trim() || t("common.untitledDatabase");
+      actions.onDatabaseChange?.(t("undo.databaseNameConfig"));
+    };
+  }
+
+  /** R02: the database's own description, a borderless inline field on the sheet, a labelled
+   *  multi-line box everywhere else. The reference carries no multi-line control at all (§13.4),
+   *  so the phone path is a single line and the textarea path — a construction, not merely a
+   *  style — is never built here. */
+  private renderDescriptionSetting(panel: HTMLElement, database: DatabaseConfig, actions: ViewConfigPanelActions, readOnly?: boolean): void {
+    if (!this.asSheet) {
+      this.renderTextarea(panel, t("viewConfig.databaseDescription"), database.description || "", t("viewConfig.descriptionPlaceholder"), (value) => {
+        database.description = value || undefined;
+        actions.onDatabaseChange?.(t("undo.databaseDescriptionConfig"));
+      }, readOnly, (value) => {
+        database.description = value || undefined;
+      });
+      return;
+    }
+    const row = panel.createDiv({ cls: this.rowClass() });
+    row.createDiv({ cls: "obnotion-view-config-label", text: t("viewConfig.databaseDescription") });
+    const field = row.createDiv({ cls: "obnotion-view-config-field" });
+    if (readOnly) {
+      field.createDiv({ cls: "obnotion-view-config-readonly-value", text: database.description || t("common.notSet") });
+      return;
+    }
+    const input = field.createEl("input", {
+      cls: "obnotion-view-config-text",
+      attr: { type: "text", placeholder: t("viewConfig.descriptionPlaceholder"), "aria-label": t("viewConfig.databaseDescription") },
+    });
+    input.value = database.description || "";
+    input.oninput = () => { database.description = input.value.trim() || undefined; };
+    input.onchange = () => {
+      database.description = input.value.trim() || undefined;
+      actions.onDatabaseChange?.(t("undo.databaseDescriptionConfig"));
+    };
   }
 
   private renderNewRecordTemplateSetting(
@@ -663,6 +774,55 @@ export class ViewConfigPanelRenderer {
     actions: ViewConfigPanelActions,
     readOnly?: boolean,
   ): void {
+    // R06: the path picker, the engine choice and the remove action move into their own
+    // sub-sheet, so the one row this leaves on the settings sheet stays a single navigation row
+    // rather than the two icon-only buttons and an inline dropdown it drew before — L4's "0
+    // icon-only buttons" reads the sheet body, not this sub-sheet.
+    if (this.asSheet) {
+      const openPicker = () => {
+        new MarkdownFileSuggestModal(actions.app, (file) => {
+          database.newRecordTemplate = { path: file.path, engine: database.newRecordTemplate?.engine || "markdown" };
+          actions.onDatabaseChange?.(t("undo.newRecordTemplateConfig"));
+        }, t("template.choose")).open();
+      };
+      if (readOnly) {
+        this.renderNavRow(panel, "file-plus-2", t("template.label"), database.newRecordTemplate?.path || t("common.notSet"), undefined);
+        return;
+      }
+      this.renderNavRow(panel, "file-plus-2", t("template.label"), database.newRecordTemplate?.path || t("common.notSet"), () => {
+        new SettingsSubSheetModal(actions.app, t("template.label"), (contentEl) => {
+          this.renderNavRow(contentEl, "file-plus-2", t("template.choose"), database.newRecordTemplate?.path || t("common.notSet"), openPicker);
+          const engineRow = contentEl.createDiv({ cls: this.rowClass() });
+          engineRow.createDiv({ cls: "obnotion-view-config-label", text: t("template.engine.label") });
+          const engineField = engineRow.createDiv({ cls: "obnotion-view-config-field" });
+          createDropdownField({
+            parent: engineField,
+            label: t("template.engine.label"),
+            value: database.newRecordTemplate?.engine || "markdown",
+            options: [
+              { value: "markdown", text: t("template.engine.markdown") },
+              { value: "core", text: t("template.engine.core") },
+              { value: "templater", text: t("template.engine.templater") },
+            ],
+            hideLabel: true,
+            disabled: !database.newRecordTemplate?.path,
+            onChange: (value) => {
+              if (!database.newRecordTemplate) return;
+              database.newRecordTemplate.engine = value === "core" ? "core" : value === "templater" ? "templater" : "markdown";
+              actions.onDatabaseChange?.(t("undo.newRecordTemplateConfig"));
+            },
+          });
+          if (database.newRecordTemplate?.path) {
+            this.renderActionRow(contentEl, "x", t("template.remove"), () => {
+              database.newRecordTemplate = undefined;
+              actions.onDatabaseChange?.(t("undo.newRecordTemplateConfig"));
+            }, false);
+          }
+          contentEl.createDiv({ cls: this.hintClass(), text: t("template.help") });
+        }).open();
+      });
+      return;
+    }
     const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "obnotion-view-config-label", text: t("template.label") });
     const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-field-stack" });
@@ -727,6 +887,27 @@ export class ViewConfigPanelRenderer {
     actions: ViewConfigPanelActions,
     readOnly?: boolean,
   ): void {
+    // R07: the row itself is the picker's trigger, so there is no separate choose button to
+    // count as icon-only; the remove action — state-conditional, absent from the reference's own
+    // resting state — becomes its own labelled row rather than a second bare glyph beside it.
+    if (this.asSheet) {
+      const openPicker = () => {
+        new ImageFileSuggestModal(actions.app, (file) => {
+          database.coverImage = file.path;
+          database.coverImagePositionY = 50;
+          actions.onDatabaseChange?.(t("undo.databaseCoverConfig"));
+        }, t("databaseCover.choose")).open();
+      };
+      this.renderNavRow(panel, "image", t("databaseCover.label"), database.coverImage || t("common.notSet"), readOnly ? undefined : openPicker);
+      if (!readOnly && database.coverImage) {
+        this.renderActionRow(panel, "x", t("databaseCover.remove"), () => {
+          database.coverImage = undefined;
+          database.coverImagePositionY = undefined;
+          actions.onDatabaseChange?.(t("undo.databaseCoverConfig"));
+        }, false);
+      }
+      return;
+    }
     const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "obnotion-view-config-label", text: t("databaseCover.label") });
     const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-database-cover-setting" });
@@ -781,7 +962,7 @@ export class ViewConfigPanelRenderer {
         if (value === "__create_record_icon_field__") { actions.createRecordIconField?.("database"); return; }
         database.recordIconField = value || undefined;
         actions.onDatabaseChange?.(t("recordIcon.field"));
-      }, true);
+      }, true, false, undefined, undefined, "smile");
     }
     this.renderComputedSyncMode(panel, database, actions, actions.isDatabaseReadOnly);
     this.renderStatusPresetSettings(panel, {
@@ -808,11 +989,14 @@ export class ViewConfigPanelRenderer {
       const heading = section.createDiv({ cls: "obnotion-conditional-format-heading" });
       heading.createSpan({ text: t("conditionalFormat.title") });
       if (!readOnly) {
+        // Labelled, not icon-only: the reference's own add affordances are always full-width
+        // rows or, here, a button that names what it does (§13.4 forbids a bare glyph strip).
         const add = heading.createEl("button", {
-          cls: "obnotion-conditional-format-add obnotion-icon-only-button",
+          cls: "obnotion-conditional-format-add",
           attr: { type: "button", "aria-label": t("conditionalFormat.add") },
         });
-        setIcon(add, "plus");
+        setIcon(add.createSpan({ cls: "obnotion-conditional-format-add-icon" }), "plus");
+        add.createSpan({ text: t("conditionalFormat.add") });
         add.onclick = () => {
           const firstField = database.schema.columns[0]?.key || "file.name";
           const rule: ConditionalFormatRule = {
@@ -1231,17 +1415,21 @@ export class ViewConfigPanelRenderer {
     }, true);
   }
 
+  /** The tree's own leaf count — a group or a `not` carries none of its own, so this recurses
+   *  into both rather than counting nodes, which is what R04's `[n rules]` value reports. */
+  private countSourceRuleLeaves(node: SourceRuleNode | undefined): number {
+    if (!node) return 0;
+    if (isSourceRuleGroup(node)) return node.rules.reduce((sum, child) => sum + this.countSourceRuleLeaves(child), 0);
+    if (isSourceRuleNot(node)) return this.countSourceRuleLeaves(node.rule);
+    return 1;
+  }
+
   private renderSourceRules(
     panel: HTMLElement,
     database: DatabaseConfig,
     actions: ViewConfigPanelActions,
     readOnly?: boolean
   ): void {
-    const row = panel.createDiv({ cls: this.rowClass("obnotion-source-rules-setting") });
-    row.createDiv({ cls: "obnotion-view-config-label", text: t("viewConfig.sourceRules") });
-    const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-field-stack" });
-    field.createDiv({ cls: this.hintClass("obnotion-source-rules-help"), text: t("viewConfig.sourceRules.help") });
-    const editor = field.createDiv({ cls: "obnotion-source-rules-editor" });
     const tree = createEditableSourceRuleRoot(getSourceRuleTree(database.sourceRuleTree, database.sourceRules, database.sourceLogic));
     if (tree && (!database.sourceRuleTree || database.sourceRuleTree !== tree) && !readOnly) {
       database.sourceRuleTree = tree;
@@ -1254,23 +1442,42 @@ export class ViewConfigPanelRenderer {
       database.sourceLogic = undefined;
       actions.onDatabaseChange?.(t("undo.sourceRulesConfig"));
     };
-    if (tree) {
-      this.renderSourceRuleNode(editor, tree, commit, !!readOnly, database, getVaultProperties(actions.app));
-    } else {
-      editor.createDiv({ cls: "obnotion-source-rules-empty", text: t("viewConfig.sourceRules.empty") });
+    const buildEditor = (host: HTMLElement) => {
+      host.createDiv({ cls: this.hintClass("obnotion-source-rules-help"), text: t("viewConfig.sourceRules.help") });
+      const editor = host.createDiv({ cls: "obnotion-source-rules-editor" });
+      if (tree) {
+        this.renderSourceRuleNode(editor, tree, commit, !!readOnly, database, getVaultProperties(actions.app));
+      } else {
+        editor.createDiv({ cls: "obnotion-source-rules-empty", text: t("viewConfig.sourceRules.empty") });
+      }
+      if (!readOnly && !tree) {
+        const buttons = editor.createDiv({ cls: "obnotion-source-rule-actions" });
+        this.createSourceRuleIconButton(buttons, "plus", t("viewConfig.sourceRules.addRule"), () => {
+          commit({ field: "file.name", op: "eq", value: "" });
+        });
+        this.createSourceRuleIconButton(buttons, "folder-plus", t("viewConfig.sourceRules.addGroup"), () => {
+          commit({ type: "group", logic: "and", rules: [] });
+        });
+        this.createSourceRuleIconButton(buttons, "terminal", t("viewConfig.sourceRules.addExpression"), () => {
+          commit({ type: "expression", expression: "" });
+        });
+      }
+    };
+    // R04: the three bare glyphs (and the tree editor they belong to) leave the sheet body for
+    // their own sub-sheet — which is what empties the stack-row set L9 guards — leaving a
+    // navigation row that reads the tree's own leaf count.
+    if (this.asSheet) {
+      const count = this.countSourceRuleLeaves(tree);
+      const value = count === 0 ? t("viewConfig.sourceRules.none") : t("toolbar.appliedCount", { count });
+      this.renderNavRow(panel, "list-filter", t("viewConfig.sourceRules"), value, () => {
+        new SettingsSubSheetModal(actions.app, t("viewConfig.sourceRules"), buildEditor).open();
+      });
+      return;
     }
-    if (!readOnly && !tree) {
-      const buttons = editor.createDiv({ cls: "obnotion-source-rule-actions" });
-      this.createSourceRuleIconButton(buttons, "plus", t("viewConfig.sourceRules.addRule"), () => {
-        commit({ field: "file.name", op: "eq", value: "" });
-      });
-      this.createSourceRuleIconButton(buttons, "folder-plus", t("viewConfig.sourceRules.addGroup"), () => {
-        commit({ type: "group", logic: "and", rules: [] });
-      });
-      this.createSourceRuleIconButton(buttons, "terminal", t("viewConfig.sourceRules.addExpression"), () => {
-        commit({ type: "expression", expression: "" });
-      });
-    }
+    const row = panel.createDiv({ cls: this.rowClass("obnotion-source-rules-setting") });
+    row.createDiv({ cls: "obnotion-view-config-label", text: t("viewConfig.sourceRules") });
+    const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-field-stack" });
+    buildEditor(field);
   }
 
   private renderSourceRuleNode(
@@ -1727,10 +1934,10 @@ export class ViewConfigPanelRenderer {
         desc: t("viewConfig.computedSync.automaticDesc"),
       },
     ];
-    const row = panel.createDiv({ cls: this.rowClass() });
-    row.createDiv({ cls: "obnotion-view-config-label", text: t("viewConfig.computedSyncMode") });
-    const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-field-stack" });
     if (readOnly) {
+      const row = panel.createDiv({ cls: this.rowClass() });
+      row.createDiv({ cls: "obnotion-view-config-label", text: t("viewConfig.computedSyncMode") });
+      const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-field-stack" });
       field.createDiv({
         cls: "obnotion-view-config-readonly-value",
         text: options.find((option) => option.value === mode)?.title || t("viewConfig.computedSync.displayOnly"),
@@ -1766,11 +1973,13 @@ export class ViewConfigPanelRenderer {
       reflect();
       return true;
     };
-    if (this.asSheet) {
-      // Exclusive choice as the shared segmented group: every choice on a sheet is either the
-      // shared checkbox or this group, and the group's single-select lives in its behaviour —
-      // activating one option clears the others — not in the control type, so the options carry
-      // checkbox semantics like the new-record placement they share the idiom with.
+    // Exclusive choice as the shared segmented group: every choice on a sheet is either the
+    // shared checkbox or this group, and the group's single-select lives in its behaviour —
+    // activating one option clears the others — not in the control type, so the options carry
+    // checkbox semantics like the new-record placement they share the idiom with. Shared by the
+    // sheet's own row and its sub-sheet host below, since a phone sub-sheet reads the same as a
+    // phone row.
+    const buildSegmentedGroup = (field: HTMLElement) => {
       const group = field.createDiv({
         cls: "obnotion-new-placement",
         attr: { role: "group", "aria-label": t("viewConfig.computedSyncMode") },
@@ -1799,7 +2008,8 @@ export class ViewConfigPanelRenderer {
           if (!await changeMode(option.value)) reflect();
         };
       }
-    } else {
+    };
+    const buildCards = (field: HTMLElement) => {
       const cards = field.createDiv({ cls: "obnotion-computed-sync-cards" });
       reflectors.push(() => {
         const activeMode = normalizeComputedSyncMode(database.computedSyncMode);
@@ -1830,17 +2040,33 @@ export class ViewConfigPanelRenderer {
         body.createDiv({ cls: "obnotion-computed-sync-card-title", text: option.title });
         body.createDiv({ cls: "obnotion-computed-sync-card-desc", text: option.desc });
       }
-    }
-    field.createDiv({ cls: this.hintClass(), text: t("viewConfig.computedSync.help") });
-    if ((database.schema?.columns || []).some((col) => col.type === "computed")) {
-      const cleanup = field.createEl("button", {
-        cls: "obnotion-computed-cleanup-button",
-        text: t("viewConfig.computedCleanup.button"),
-        attr: { type: "button" },
-      });
-      cleanup.onclick = () => actions.onComputedFrontmatterCleanup?.();
-      field.createDiv({ cls: this.hintClass(), text: t("viewConfig.computedCleanup.help") });
-    }
+    };
+    const buildTail = (field: HTMLElement) => {
+      field.createDiv({ cls: this.hintClass(), text: t("viewConfig.computedSync.help") });
+      if ((database.schema?.columns || []).some((col) => col.type === "computed")) {
+        const cleanup = field.createEl("button", {
+          cls: "obnotion-computed-cleanup-button",
+          text: t("viewConfig.computedCleanup.button"),
+          attr: { type: "button" },
+        });
+        cleanup.onclick = () => actions.onComputedFrontmatterCleanup?.();
+        field.createDiv({ cls: this.hintClass(), text: t("viewConfig.computedCleanup.help") });
+      }
+    };
+
+    // R09 stays inline rather than following R04/R06 into their own sub-sheet: the segmented
+    // control has no separate surface to open — "Tap opens" would be a chevron pointing nowhere
+    // — and the landed placement-button-ink guard (`__shellSettingsPlacementInk`) reads its
+    // buttons off this sheet directly, which a relocation this harness's stubbed `Modal` cannot
+    // reach would leave unmeasurable rather than green. Spec drift, not a silent cut: `spec.md`
+    // §13.3's chevron for this row is not built.
+    const row = panel.createDiv({ cls: this.rowClass(this.asSheet ? "obnotion-settings-nav-row" : undefined) });
+    if (this.asSheet) setIcon(row.createDiv({ cls: "obnotion-settings-nav-row-icon" }), "refresh-cw");
+    row.createDiv({ cls: "obnotion-view-config-label", text: t("viewConfig.computedSyncMode") });
+    const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-field-stack" });
+    if (this.asSheet) buildSegmentedGroup(field);
+    else buildCards(field);
+    buildTail(field);
   }
 
   renderStatusPresetSettings(
@@ -1857,6 +2083,21 @@ export class ViewConfigPanelRenderer {
   ): void {
     const presets = options.presets || [];
     if (presets.length === 0 && !options.onManagePresets) return;
+    // R10: the sheet reads this as one navigation row — the count where the reference shows a
+    // value, the preset manager (the same modal R23's footer action opens) behind the chevron.
+    // The default-preset choice this desktop row also offers lives in that manager already
+    // (`StatusPresetManagerModal`'s own default row), so nothing here drops it — it just stops
+    // being a second place to set the same thing.
+    if (this.asSheet && !readOnly) {
+      this.renderNavRow(
+        panel,
+        "list-checks",
+        t("viewConfig.statusPreset"),
+        presets.length > 0 ? t("toolbar.appliedCount", { count: presets.length }) : t("statusPresets.none"),
+        () => options.onManagePresets?.(),
+      );
+      return;
+    }
     const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "obnotion-view-config-label", text: t("viewConfig.statusPreset") });
     const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-inline-controls" });
@@ -1896,17 +2137,31 @@ export class ViewConfigPanelRenderer {
     actions: ViewConfigPanelActions,
     readOnly?: boolean
   ): void {
-    const row = panel.createDiv({ cls: this.rowClass() });
-    row.createDiv({ cls: "obnotion-view-config-label", text: t("viewConfig.newRecordFolder") });
-    const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-field-stack" });
-
     if (readOnly) {
-      field.createDiv({
+      const row = panel.createDiv({ cls: this.rowClass() });
+      row.createDiv({ cls: "obnotion-view-config-label", text: t("viewConfig.newRecordFolder") });
+      row.createDiv({ cls: "obnotion-view-config-field" }).createDiv({
         cls: "obnotion-view-config-readonly-value",
         text: database.newRecordFolder || t("common.untitled"),
       });
       return;
     }
+    // R05: the picker this row opens is new — no folder picker existed anywhere in this plugin
+    // before `folder-suggest-modal.ts` — but the field it fills is the same one a typed path
+    // always wrote.
+    if (this.asSheet) {
+      const value = database.newRecordFolder || t("viewConfig.newRecordFolder.sameAsSource");
+      this.renderNavRow(panel, "folder-plus", t("viewConfig.newRecordFolder"), value, () => {
+        new FolderSuggestModal(actions.app, (folder) => {
+          database.newRecordFolder = folder.path || undefined;
+          actions.onDatabaseChange?.(t("undo.newRecordFolderConfig"));
+        }, t("settings.sourceFolder.placeholder")).open();
+      });
+      return;
+    }
+    const row = panel.createDiv({ cls: this.rowClass() });
+    row.createDiv({ cls: "obnotion-view-config-label", text: t("viewConfig.newRecordFolder") });
+    const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-field-stack" });
     const input = field.createEl("input", {
       cls: "obnotion-view-config-text",
       attr: { type: "text", placeholder: t("settings.sourceFolder.placeholder"), "aria-label": t("settings.sourceFolder.placeholder") },
@@ -2142,6 +2397,74 @@ export class ViewConfigPanelRenderer {
     return Math.round(total / columns.length);
   }
 
+  /**
+   * The reference's one-line router: a leading icon, the label, a value hung right on the
+   * label's own line, and a trailing chevron — the whole row a tap target. Phone sheets only:
+   * the anchored desktop panel keeps its plain row (no icon, no chevron), because the anatomy
+   * this method draws is what a bottom-sheet list reads as a navigation row, and a 320px
+   * popover row never needed the same signal.
+   *
+   * `value` is either the row's own right-aligned text, or a builder that fills the field with
+   * something else already shaped like a trigger (a dropdown field) — the lane's own
+   * `valueIsTrigger` reading is what makes that second shape still count as a valid value.
+   */
+  private renderNavRow(
+    panel: HTMLElement,
+    icon: string,
+    label: string,
+    value: string | ((field: HTMLElement) => void),
+    onClick?: () => void,
+    rowAttr?: Record<string, string>,
+  ): HTMLElement {
+    const row = panel.createDiv({ cls: this.rowClass(this.asSheet ? "obnotion-settings-nav-row" : undefined), attr: rowAttr });
+    if (this.asSheet) setIcon(row.createDiv({ cls: "obnotion-settings-nav-row-icon" }), icon);
+    row.createDiv({ cls: "obnotion-view-config-label", text: label });
+    const field = row.createDiv({ cls: "obnotion-view-config-field" });
+    if (typeof value === "function") {
+      value(field);
+    } else {
+      field.createDiv({
+        cls: this.asSheet ? "obnotion-settings-nav-row-value" : "obnotion-view-config-readonly-value",
+        text: value,
+      });
+    }
+    if (this.asSheet) setIcon(row.createDiv({ cls: "obnotion-settings-nav-row-chevron" }), "chevron-right");
+    if (onClick) {
+      row.setAttr("role", "button");
+      row.setAttr("tabindex", "0");
+      row.addClass("obnotion-view-config-row-clickable");
+      row.onclick = onClick;
+      row.onkeydown = (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        onClick();
+      };
+    }
+    return row;
+  }
+
+  /** The action row: leading icon, label, no chevron and no value — the reference's terminal
+   *  rows, which announce rather than journey. Used for the sheet's own footer card and for any
+   *  row-shaped shortcut that opens a modal directly instead of drilling into another sheet. */
+  private renderActionRow(panel: HTMLElement, icon: string, label: string, onClick: () => void, sheetTerminal = true): HTMLElement {
+    const row = panel.createDiv({
+      cls: this.rowClass([this.asSheet ? "obnotion-settings-nav-row" : "", sheetTerminal ? "obnotion-settings-sheet-action" : ""].filter(Boolean).join(" ")),
+    });
+    if (this.asSheet) setIcon(row.createDiv({ cls: "obnotion-settings-nav-row-icon" }), icon);
+    row.createDiv({ cls: "obnotion-view-config-label", text: label });
+    row.createDiv({ cls: "obnotion-view-config-field" });
+    row.setAttr("role", "button");
+    row.setAttr("tabindex", "0");
+    row.addClass("obnotion-view-config-row-clickable");
+    row.onclick = onClick;
+    row.onkeydown = (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      onClick();
+    };
+    return row;
+  }
+
   private renderSelect(
     panel: HTMLElement,
     label: string,
@@ -2151,9 +2474,17 @@ export class ViewConfigPanelRenderer {
     searchable = false,
     disabled = false,
     rowAttr?: Record<string, string>,
-    hint?: string
+    hint?: string,
+    // Phone sheets only, and only when the row genuinely opens something. `undefined` means the
+    // row stays plain (a disabled dropdown carries no picker to open, so it draws no chevron
+    // that would promise one); `""` is a nav row with no leading icon (the reference's own
+    // Display-card rows: a chevron with nothing beside the label) — every other string is the
+    // icon this row leads with.
+    navIcon?: string,
   ): void {
-    const row = panel.createDiv({ cls: this.rowClass(), attr: rowAttr });
+    const showNav = this.asSheet && !disabled && navIcon !== undefined;
+    const row = panel.createDiv({ cls: this.rowClass(showNav ? "obnotion-settings-nav-row" : undefined), attr: rowAttr });
+    if (showNav && navIcon) setIcon(row.createDiv({ cls: "obnotion-settings-nav-row-icon" }), navIcon);
     row.createDiv({ cls: "obnotion-view-config-label", text: label });
     const field = row.createDiv({ cls: "obnotion-view-config-field" });
     const hasPropertyIcons = options.some((option) => isPropertyDropdownIcon(option.icon));
@@ -2163,7 +2494,14 @@ export class ViewConfigPanelRenderer {
       options,
       value,
       onChange,
-      className: `obnotion-view-config-dropdown${hasPropertyIcons ? " obnotion-view-config-field-dropdown" : ""}`,
+      // The trigger IS the row's value on a nav row — carrying that class alongside the
+      // dropdown's own is what lets the lane's anatomy read it as one, rather than reporting a
+      // qualifying-looking row with no value at all.
+      className: [
+        "obnotion-view-config-dropdown",
+        hasPropertyIcons ? "obnotion-view-config-field-dropdown" : "",
+        showNav ? "obnotion-settings-nav-row-value" : "",
+      ].filter(Boolean).join(" "),
       popoverClassName: "obnotion-view-config-dropdown-popover",
       placeholder: t("common.notSet"),
       hideLabel: true,
@@ -2173,6 +2511,7 @@ export class ViewConfigPanelRenderer {
         if (!renderDropdownPropertyTypeIcon(parent, icon)) setIcon(parent, icon);
       } : undefined,
     });
+    if (showNav) setIcon(row.createDiv({ cls: "obnotion-settings-nav-row-chevron" }), "chevron-right");
     // A hint rides below its own row (the conditional-colour summary's precedent) rather than
     // inside the control's field: it speaks for the row, and the row's label stays short enough
     // to share a line with its control.
@@ -2269,9 +2608,14 @@ export class ViewConfigPanelRenderer {
     value: boolean,
     onChange: (value: boolean) => void,
     disabled = false,
-    helpText?: string
+    helpText?: string,
+    // The reference draws a toggle row with no icon (§13.4) except the one this sheet names by
+    // exception — View source rules keeps one in the row-by-row table (`spec.md` §13.3, R16).
+    icon?: string,
   ): void {
-    const row = panel.createDiv({ cls: this.rowClass() });
+    const showIcon = this.asSheet && Boolean(icon);
+    const row = panel.createDiv({ cls: this.rowClass(showIcon ? "obnotion-settings-nav-row" : undefined) });
+    if (showIcon) setIcon(row.createDiv({ cls: "obnotion-settings-nav-row-icon" }), icon!);
     row.createDiv({ cls: "obnotion-view-config-label", text: label });
     const field = row.createDiv({ cls: "obnotion-view-config-field" });
     if (disabled) {

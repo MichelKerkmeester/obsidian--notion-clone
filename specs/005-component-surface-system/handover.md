@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T00:41:51Z"
-    last_updated_by: "295-loop-002-properties-sheet-visual-parity"
-    recent_action: "076/002 landed+verified 768508f8: 2x crossing, judged movers, gate 28/0, judge next"
-    next_safe_action: "JUDGE scores 076/002 verification.md against 076/spec.md 5; REMEDIATE if any row <2"
+    last_updated_at: "2026-09-11T02:45:00Z"
+    last_updated_by: "292-loop-001-settings-sheet-visual-parity"
+    recent_action: "076/001 CREATE landed: 5 cards, L1-L9 green, lane exit 0, gate 28/28"
+    next_safe_action: "Dispatch the image judge on 076/001, twice consecutively on this tree"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
       - "076 closes no sheet on lane evidence alone; the image judge is a required gate (076 D1)"
@@ -44,6 +44,23 @@ _memory:
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
 
+### 2026-09-11 ~02:45, `076/001-settings-sheet-visual-parity` CREATE LANDED — worktree `292-loop-001-settings-sheet-visual-parity`
+
+**What this leg did** — a native Sonnet implementation leg (escalated after two GLM legs stalled)
+executed T004-T012: the five cards, the `renderNavRow`/`renderActionRow` primitives, the textarea
+path deleted, the ten over-80-character prose keys shortened in English, two new small surfaces the
+plugin never had before (`folder-suggest-modal.ts`, `modals/settings-sub-sheet-modal.ts`), and the
+Properties/Filters/Sorts summary rows wired to the same toggle the toolbar buttons already fire.
+`node tools/live/sheet-grammar.mjs` exits 0 (L1-L9 all green, L3 at exactly 13/19 qualifying rows);
+`npm run gate` reads 28/28 after the css-lane release naming every capture that moved. Two mid-build
+discoveries, both recorded rather than silently worked around: the render-assertion bundle's
+stubbed `obsidian` module (`tools/storybook/obsidian-stub.mjs`) only draws a real `<svg>` for an
+allowlisted icon set (four new icons added, one swapped to an existing alias) and its `Modal` export
+throws on construction — which is why R09 (Computed sync) stayed inline rather than following
+R04/R06 into a click-to-open sub-sheet, recorded in `verification.md`'s RED/GREEN register. Rebase
+onto `origin/main` (24 commits ahead) was skipped — the dirty tree's `styles.css`/`sheet-grammar.mjs`
+would conflict — left for the lander. Next: the image judge, twice consecutively on this tree, then
+the operator's own device read.
 ### 2026-09-10 ~23:12, `076/002-properties-sheet-visual-parity` DEFINE + PLAN LANDED — worktree `295-loop-002-properties-sheet-visual-parity`
 
 **What this leg did** — re-read every reference the scaffold cited against the actual renderer code

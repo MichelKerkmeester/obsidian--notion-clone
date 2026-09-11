@@ -36,7 +36,7 @@ Plus the shared battery, read rather than assumed: `npx tsc --noEmit`, `npm run 
 ---
 
 ## 001-settings-sheet-visual-parity
-- [x] 1 DEFINE  - [x] 2 Surfaces  - [ ] 3 RED  - [ ] 4 GREEN  - [ ] 5 Captures  - [ ] 6 Judge #1  - [ ] 7 Judge #2  - [ ] 8 Operator
+- [x] 1 DEFINE  - [x] 2 Surfaces  - [x] 3 RED  - [x] 4 GREEN  - [x] 5 Captures  - [ ] 6 Judge #1  - [ ] 7 Judge #2  - [ ] 8 Operator
 
 ## 002-properties-sheet-visual-parity
 - [ ] 1 DEFINE  - [ ] 2 Surfaces  - [ ] 3 RED  - [ ] 4 GREEN  - [ ] 5 Captures  - [ ] 6 Judge #1  - [ ] 7 Judge #2  - [ ] 8 Operator

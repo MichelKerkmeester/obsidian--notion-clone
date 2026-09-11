@@ -5218,6 +5218,12 @@ export class DatabaseView extends FileView {
           openInvalidEvents: () => { void this.openInvalidEvents(); },
         });
       },
+      // R12-R14: the same toggle a toolbar button already fires, given a fallback anchor when
+      // there is no live button to read one from (`openCardTitleSettings` above sets the
+      // precedent for this exact fallback pattern).
+      onOpenProperties: () => this.toggleHeaderPopover("columns", this.containerEl_?.querySelector<HTMLElement>(".obnotion-col-manager-btn") || this.containerEl_!),
+      onOpenFilters: () => this.toggleHeaderPopover("filter", this.containerEl_?.querySelector<HTMLElement>(".obnotion-filter-btn") || this.containerEl_!),
+      onOpenSorts: () => this.toggleHeaderPopover("sort", this.containerEl_?.querySelector<HTMLElement>(".obnotion-sort-btn") || this.containerEl_!),
       onDatabaseChange: (label) => {
         this.pendingUndoLabel = label || t("undo.viewConfig");
         this.scheduleConfigSave(undefined, this.getCurrentDatabaseMutationTarget());

@@ -1643,8 +1643,7 @@
   grid-column: 3;
 }
 
-.obnotion-container .obnotion-conditional-format-controls button,
-.obnotion-container .obnotion-conditional-format-add {
+.obnotion-container .obnotion-conditional-format-controls button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1654,6 +1653,28 @@
   border-radius: var(--obnotion-radius-sm);
   background: transparent;
   box-shadow: none;
+}
+
+/* Labelled, not the 26px icon-only square above: the reference's add affordances always name
+   themselves (§13.4), so this button carries its own icon-plus-text row rather than the fixed
+   square its per-rule sibling buttons keep. */
+.obnotion-container .obnotion-conditional-format-add {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--obnotion-space-2);
+  height: 26px;
+  padding: 0 var(--obnotion-space-2);
+  border: 0;
+  border-radius: var(--obnotion-radius-sm);
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+}
+
+.obnotion-container .obnotion-conditional-format-add-icon {
+  display: inline-flex;
+  align-items: center;
 }
 
 .obnotion-container .obnotion-heading-row {
@@ -12326,7 +12347,6 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
    6px cushion that pads other panels' rows is deliberately dropped, because a list row's next
    neighbour sits directly beneath it, the hairline below marking the seam. */
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row:has(> .obnotion-view-config-field-stack),
-.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row:has(> .obnotion-view-config-textarea),
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row:has(> .obnotion-view-config-readonly-multiline),
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row:has(> .obnotion-view-config-range),
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row:has(> .obnotion-new-placement) {
@@ -12360,18 +12380,139 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
 }
 
 /* The settings sheet's card grouping. The sheet's own surface token stays the canvas; each
-   section's rows collect on a card one elevation step lighter than that canvas, read through
-   --obnotion-settings-card-fill so the lighter-than-the-canvas direction is chosen per theme — the
-   two themes' ladders step away from the page fill in opposite directions, so no single rung of
-   either ladder clears the overlay canvas in both. The inset is the sheet's own 16px so the cards'
-   content keeps the one inset every phone sheet already reads; the gap and radius are the
-   provisional numbers pending the operator's reference capture and retune. Content inside the card
-   carries the inset, so the card itself spans the body's full width and the canvas shows through
-   the 12px between cards. */
+   section's rows collect on a card that sits one step up its theme's own ladder — light: the page
+   fill, above a canvas that mixes toward black; dark: the modal step, above a canvas that mixes
+   toward white. (The dark sheet's canvas lifts itself: the surface-overlay token mixes the page
+   fill toward white, so a card parked on the page fill sits BELOW its own canvas there — the
+   inversion the capture measured. Taking the next step of the same ladder, rather than a second
+   definition, keeps every theme that retunes the ladder correct without its own rule.)
+   The inset is the sheet's own 16px so the cards' content keeps the one inset every phone sheet
+   already reads; the gap and radius are the provisional numbers pending the operator's reference
+   capture and retune. Content inside the card carries the inset, so the card itself spans the
+   body's full width and the canvas shows through the 16px between cards. */
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-body > .obnotion-settings-card {
   border-radius: var(--obnotion-radius-lg);
-  background: var(--obnotion-settings-card-fill);
-  margin: 0 var(--obnotion-sheet-inset) var(--obnotion-space-5);
+  background: var(--background-primary);
+  margin: 0 var(--obnotion-sheet-inset) var(--obnotion-space-6);
+}
+
+.theme-dark .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-body > .obnotion-settings-card {
+  background: var(--obnotion-surface-modal);
+}
+
+/* The navigation row. The reference's one-line router: a leading icon, the label, a secondary
+   value hung right on the label's own line, a trailing chevron — the whole row the tap target.
+   The row reuses the shared panel-row grammar (44px floor, 16px inset, hairline between rows),
+   so what this block adds is only the anatomy: the icon's and chevron's quiet voice, the value's
+   grey matching the reference's secondary tier, and the trigger-backed variant, where the
+   plugin's own picker wears the row's clothes — borderless, right-grounded, its intrinsic icon
+   and doubled chevron retired in favour of the row's own. */
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-nav-row .obnotion-view-config-field {
+  justify-content: flex-end;
+}
+
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-nav-row .obnotion-settings-nav-row-icon,
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-nav-row .obnotion-settings-nav-row-chevron {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  color: var(--text-faint);
+}
+
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-nav-row .obnotion-settings-nav-row-icon svg,
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-nav-row .obnotion-settings-nav-row-chevron svg {
+  width: 100%;
+  height: 100%;
+}
+
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-nav-row .obnotion-settings-nav-row-value {
+  font-size: var(--obnotion-font-base);
+  color: var(--text-muted);
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 60%;
+}
+
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-nav-row .obnotion-view-config-dropdown {
+  width: 100%;
+  min-height: 0;
+  justify-content: flex-end;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-nav-row .obnotion-view-config-dropdown .obnotion-dropdown-field-icon,
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-nav-row .obnotion-view-config-dropdown .obnotion-dropdown-field-chevron {
+  display: none;
+}
+
+/* The trigger's own text block is a flex row (`.obnotion-dropdown-field-text`, baseline-aligned
+   for label + value), sitting in the dropdown's single remaining grid column now the icon and
+   chevron are hidden — `justify-content` on the button two rules up is a grid property there and
+   never reaches this flex child, so without this the value reads flush against the row's LABEL
+   rather than hung against its own trailing edge, the one thing every other nav-row value does. */
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-nav-row .obnotion-view-config-dropdown .obnotion-dropdown-field-text {
+  justify-content: flex-end;
+}
+
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-nav-row .obnotion-view-config-dropdown .obnotion-dropdown-field-value {
+  font-size: var(--obnotion-font-base);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* The naming row's chip: the reference leads its name row with a bordered rounded square, the
+   one deliberate frame on the sheet — it pictures the database, it does not box the typing. The
+   row's field stays borderless, which is what separates this control kind from the old form. */
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-nav-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 23px;
+  height: 23px;
+  flex: 0 0 auto;
+  border: 1px solid var(--obnotion-border-regular, var(--background-modifier-border));
+  border-radius: 6px;
+  color: var(--text-muted);
+}
+
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-nav-chip svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* The borderless inline field. The reference borders a box only to search; naming and describing
+   ride on the row's own background. Everything the boxed control carried — border, fill, inset
+   padding — yields here; the 16px size stays, because that number is the iOS-zoom floor the
+   shipped control comment already argues for, not a style choice. */
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-card .obnotion-view-config-text {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  min-height: 0;
+  width: 100%;
+  text-align: right;
+}
+
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-card .obnotion-settings-nav-lead .obnotion-view-config-text {
+  text-align: left;
+}
+
+/* The terminal action card: the sheet's last card, marker-classNameed for the lane, holding the
+   one action row — leading icon, label, no chevron, no value. The reference's terminal rows
+   announce; they do not journey. */
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-settings-sheet-action .obnotion-settings-nav-row-icon {
+  color: var(--text-muted);
 }
 
 /* A heading sitting above its own card is the card's label: the card supplies the separation the
@@ -12531,10 +12672,6 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
   width: auto;
   flex: 1 1 0;
   min-width: 0;
-}
-
-.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-textarea {
-  min-height: calc(var(--obnotion-sheet-row-min-height, 44px) * 2);
 }
 
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-dropdown .obnotion-dropdown-field-value {
@@ -24292,10 +24429,8 @@ body.is-tablet .obnotion-container .obnotion-record-open-btn {
   margin-top: var(--obnotion-space-3);
   padding-inline: var(--obnotion-space-3);
   color: var(--text-muted);
-  font-size: var(--obnotion-font-xs);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: var(--obnotion-font-md);
+  font-weight: 400;
 }
 
 @media (max-width: 700px) {

@@ -137,6 +137,7 @@ export class AddDatabaseModal extends DbModal {
       onManageStatusPresets: () => this.openStatusPresetManager(),
       isDatabaseReadOnly: false,
     };
+    renderer.renderDatabaseNameRow(host, this.tempDb, actions);
     renderer.renderDatabaseGlobals(host, this.tempDb, actions);
     renderer.renderStatusPresetSettings(host, {
       presets: statusPresets,

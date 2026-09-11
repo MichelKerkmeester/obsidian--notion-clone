@@ -37,21 +37,21 @@ been met.
 |-------|-----|---------------------|---------------------|--------------|--------|--------|
 | AC-001 | REQ-001 | Given the 299×678 ceiling, When any target is written, Then every numeric cell is traceable to our own measurement or is marked provisional with the operator capture that settles it | n/a | `spec.md` §13.12 — 17 provisionals, each with **OC-S1** or **OC-S2** named | **Met** | - |
 | AC-002 | REQ-002 | Given the sheet's grammar, When the surfaces are enumerated, Then every production producer painting it is listed and the scenario is proven to mount production link by link | n/a | `spec.md` §3; `plan.md` §3.2 — harness branch `:3412`, renderer call `:3475`, provenance `:3477` | **Met** | - |
-| AC-003 | REQ-003 | Given each of L1-L9, When it is added, Then its failing number is recorded before the producer moves and its passing number after | all nine unwritten | `tasks.md` T002; `verification.md` RED/GREEN pairs | Unmet | - |
+| AC-003 | REQ-003 | Given each of L1-L9, When it is added, Then its failing number is recorded before the producer moves and its passing number after | all nine unwritten | `tasks.md` T002; `verification.md` RED/GREEN pairs | **Met** | - |
 | AC-004 | REQ-004 | Given our phone capture and R-1/R-4/R-5, When a reviewer scores the eight-row rubric, Then the total is **≥ 14/16** with **no row at 0** | not yet judged; `plan.md` §3.5 predicts **15/16** | `verification.md`, score table #1 | Unmet | - |
 | AC-005 | REQ-004 | Given an **unchanged tree**, When the reviewer scores it a second time, Then it passes again at the same thresholds | — | `verification.md`, score table #2, tree hash recorded on both | Unmet | - |
-| AC-006 | REQ-005 | Given the change, When recaptured at the phone viewport, Then light and dark are both current and both were opened and looked at | — | `npm run screenshots:verify` 0 stale; `tasks.md` T012 | Unmet | - |
-| AC-007 | REQ-006 | Given the change, When the `071` clauses re-run unchanged in the same invocation, Then they still pass | green today | Lane exit 0, same run as AC-003 | Unmet | - |
+| AC-006 | REQ-005 | Given the change, When recaptured at the phone viewport, Then light and dark are both current and both were opened and looked at | — | `npm run screenshots:verify` 0 stale; `tasks.md` T012 | **Met** | - |
+| AC-007 | REQ-006 | Given the change, When the `071` clauses re-run unchanged in the same invocation, Then they still pass | green today | Lane exit 0, same run as AC-003 | **Met** | - |
 | AC-008 | REQ-007 | Given the redesigned sheet, When the operator re-reads it on their own iPhone, Then they report it aligned | — | Operator's own device read (D5) — **no agent ticks this row** | Unmet | - |
-| AC-009 | REQ-003 | **L1** — the body renders **≥ 5** cards, each radius `≥ 8px`, each consecutive gap `≥ 8px` | **1 card** | Lane clause L1 | Unmet | - |
-| AC-010 | REQ-003 | **L2** — **0** bordered `input[type=text]` and **0** `textarea` in the sheet body | **≥ 4** rendered; **14** input/textarea constructions in the producer (`grep -c`) | Lane clause L2 | Unmet | - |
-| AC-011 | REQ-003 | **L3** — **≥ 13** rows carry leading icon **and** right-aligned value on the label's line **and** chevron, each `≥ 44px` | **0** | Lane clause L3 | Unmet | - |
-| AC-012 | REQ-003 | **L4** — **0** icon-only buttons in the sheet body | **≥ 3** (the Source-rules `+` / folder-plus / `>_` strip) | Lane clause L4 | Unmet | - |
-| AC-013 | REQ-003 | **L5** — no text run over **80** characters, in all three locales | longest reaching this sheet is **147** (`viewConfig.sourceRules.help`); **5** EN keys exceed 80 — 147 / 141 / 129 / 128 / 107 | Lane clause L5 | Unmet | - |
-| AC-014 | REQ-003 | **L6** — the card band's luminance exceeds the canvas's in **both** themes | light `rgb(255,255,255)` on `rgb(242,242,242)` = **+13**, correct; dark `rgb(30,30,30)` on `rgb(46,46,46)` = **−16**, **inverted** | Lane clause L6 | Unmet | - |
-| AC-015 | REQ-003 | **L7** — the section heading computes `text-transform: none`, `letter-spacing: normal`, `font-weight ≤ 500` | `uppercase` / `0.04em` / `700` / 11px (`styles.css:24220-24231`) | Lane clause L7 | Unmet | - |
-| AC-016 | REQ-003 | **L8** — the last card carries `obnotion-settings-card-footer` and none of its rows has a chevron or a trailing value | no footer card exists | Lane clause L8 | Unmet | - |
-| AC-017 | REQ-003 | **L9** — the landed stack-row width clause **errors on an empty set** rather than passing vacuously | passes on a non-empty set today; goes vacuous the moment AC-010 lands | Lane clause L9, proven by emptying the set | Unmet | - |
+| AC-009 | REQ-003 | **L1** — the body renders **≥ 5** cards, each radius `≥ 8px`, each consecutive gap `≥ 8px` | **1 card** | Lane clause L1 | **Met** | - |
+| AC-010 | REQ-003 | **L2** — **0** bordered `input[type=text]` and **0** `textarea` in the sheet body | **≥ 4** rendered; **14** input/textarea constructions in the producer (`grep -c`) | Lane clause L2 | **Met** | - |
+| AC-011 | REQ-003 | **L3** — **≥ 13** rows carry leading icon **and** right-aligned value on the label's line **and** chevron, each `≥ 44px` | **0** | Lane clause L3 | **Met** | - |
+| AC-012 | REQ-003 | **L4** — **0** icon-only buttons in the sheet body | **≥ 3** (the Source-rules `+` / folder-plus / `>_` strip) | Lane clause L4 | **Met** | - |
+| AC-013 | REQ-003 | **L5** — no text run over **80** characters, in all three locales | longest reaching this sheet is **147** (`viewConfig.sourceRules.help`); **5** EN keys exceed 80 — 147 / 141 / 129 / 128 / 107 | Lane clause L5 | **Met** | - |
+| AC-014 | REQ-003 | **L6** — the card band's luminance exceeds the canvas's in **both** themes | light `rgb(255,255,255)` on `rgb(242,242,242)` = **+13**, correct; dark `rgb(30,30,30)` on `rgb(46,46,46)` = **−16**, **inverted** | Lane clause L6 | **Met** | - |
+| AC-015 | REQ-003 | **L7** — the section heading computes `text-transform: none`, `letter-spacing: normal`, `font-weight ≤ 500` | `uppercase` / `0.04em` / `700` / 11px (`styles.css:24220-24231`) | Lane clause L7 | **Met** | - |
+| AC-016 | REQ-003 | **L8** — the last card carries `obnotion-settings-card-footer` and none of its rows has a chevron or a trailing value | no footer card exists | Lane clause L8 | **Met** | - |
+| AC-017 | REQ-003 | **L9** — the landed stack-row width clause **errors on an empty set** rather than passing vacuously | passes on a non-empty set today; goes vacuous the moment AC-010 lands | Lane clause L9, proven by emptying the set | **Met** | - |
 
 ### The rubric AC-004 and AC-005 score
 
@@ -88,8 +88,12 @@ trigger; any other row below 2 is.
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Closeable:** no — 15 of 17 rows are Unmet and CREATE has not started. AC-001 and AC-002 are Met on
-the DEFINE and PLAN work recorded in `spec.md` §13 and `plan.md` §3.2.
+**Closeable:** no — AC-004, AC-005 and AC-008 remain Unmet. CREATE landed and the lane (AC-003,
+AC-006, AC-007, AC-009-AC-017) is green: `node tools/live/sheet-grammar.mjs` exits 0, `npm run
+screenshots:verify` reports 0 stale, and the `071` regression set re-ran clean in the same
+invocation. AC-001 and AC-002 were already Met on the DEFINE and PLAN work in `spec.md` §13 and
+`plan.md` §3.2. What remains is the image judge (AC-004, twice consecutively for AC-005) and the
+operator's own device read (AC-008), neither of which this leg ticks.
 
 When the rest are reached, **AC-008 is the one that stays open**: the operator's own device read,
 which no agent ticks. **AC-005 is the row that most often blocks closure**, because it needs the

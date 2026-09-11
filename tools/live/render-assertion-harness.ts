@@ -3469,10 +3469,24 @@ export function runRenderAssertions(
         schema: { columns, computedFields: [] },
       } as ViewConfig;
       const db = makeSurfaceDatabase(columns, config);
+      // Status presets render only when the actions bag carries the manager callback
+      // (`renderStatusPresetSettings`'s own early return), so a bag without one photographs one
+      // fewer row than the sheet actually draws — two real presets, not one, so the navigation
+      // row's own applied-count text (the plural path) is what the capture shows.
+      const presets = [
+        { id: "todo", name: "To do", options: [] },
+        { id: "done", name: "Done", options: [] },
+      ];
       const actions: ViewConfigPanelActions = {
         app: undefined as unknown as App,
         onChange: () => undefined,
         database: db,
+        statusPresets: presets,
+        defaultStatusPresetId: presets[0].id,
+        statusPresetHelpText: t("viewConfig.statusPreset.help"),
+        managedStatusPresetCount: presets.length,
+        onDefaultStatusPresetChange: () => undefined,
+        onManageStatusPresets: () => undefined,
       };
       bagKeys = Object.keys(actions).sort();
       const renderer = new ViewConfigPanelRenderer();

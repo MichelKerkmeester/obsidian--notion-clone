@@ -66,7 +66,7 @@ The Settings sheet is one large white card wrapped around a form of bordered tex
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | DEFINE and PLAN complete — CREATE not started |
+| **Status** | DEFINE, PLAN and CREATE complete — awaiting the image judge and the operator |
 | **Created** | 2026-09-10 |
 | **Branch** | `worktrees/290-sheet-parity-program` |
 | **Parent Spec** | `../spec.md` |

@@ -925,9 +925,11 @@ export const CONSTRUCTED_SCENARIOS = [
     title: "View configuration panel (constructed)",
     fixtureOf: "panel-view-config",
     sources: constructedSources("src/views/view-config-panel-renderer.ts", "tools/bench/table-render-bench.ts")
-      .concat(["src/views/dropdown-field.ts"]),
+      .concat(["src/views/dropdown-field.ts", "src/i18n.ts"]),
     note: "ViewConfigPanelRenderer's own render for a table view with a one-view database, so "
-      + "both the database-scoped and the view-scoped sections draw.",
+      + "both the database-scoped and the view-scoped sections draw. `src/i18n.ts` is in this "
+      + "list because a copy-only prose-length fix moves sheet-reached strings, and without it "
+      + "here that change would leave this capture's freshness check reporting current.",
   }),
   constructedScenario("board-card-properties", {
     renderer: "view-config",

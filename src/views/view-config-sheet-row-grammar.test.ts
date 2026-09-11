@@ -57,9 +57,11 @@ describe("view-config sheet reference row grammar", () => {
   });
 
   it("rows whose control needs the sheet's full width keep the stacked shape", () => {
+    // `.obnotion-view-config-textarea` dropped out of this list: the reference never draws a
+    // multi-line control, so the textarea path is deleted from the sheet rather than kept and
+    // restyled, and there is nothing left here to stack.
     for (const wideChild of [
       ".obnotion-view-config-field-stack",
-      ".obnotion-view-config-textarea",
       ".obnotion-view-config-readonly-multiline",
       ".obnotion-view-config-range",
       ".obnotion-new-placement",
@@ -121,7 +123,9 @@ describe("view-config sheet reference row grammar", () => {
       "\\.obnotion-view-config-panel\\.obnotion-mobile-bottom-sheet \\.obnotion-view-config-body > \\.obnotion-settings-card(?![:\\w])"
     );
     expect(card).toContain("border-radius: var(--obnotion-radius-lg);");
-    expect(card).toContain("background: var(--obnotion-settings-card-fill);");
-    expect(card).toContain("margin: 0 var(--obnotion-sheet-inset) var(--obnotion-space-5);");
+    expect(card).toContain("background: var(--background-primary);");
+    // The inter-card gap retunes 12px -> 16px against the reference's own ratio; the lane's own
+    // floor stays >= 8px regardless, so this pins the exact token rather than just the floor.
+    expect(card).toContain("margin: 0 var(--obnotion-sheet-inset) var(--obnotion-space-6);");
   });
 });

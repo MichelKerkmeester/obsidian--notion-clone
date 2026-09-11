@@ -128,6 +128,12 @@ const CLASS_FOLDS_INTO_REGISTRY = {
   ImageFileSuggestModal: "image-file-suggest",
   MarkdownFileSuggestModal: "markdown-file-suggest",
   CreatePropertyModal: "add-property",
+  // Both reached only from a settings-sheet nav row, so the "settings" row already covers
+  // them — a generic "SettingsSubSheetModal (DbModal)" row would name a shell with no content
+  // of its own, and FolderSuggestModal is the same picker family as the three file-suggest
+  // modals above, minus a registry scenario of its own to fold into by name.
+  SettingsSubSheetModal: "settings",
+  FolderSuggestModal: "settings",
 };
 
 // ───────────────────────────────────────────────────────────────────

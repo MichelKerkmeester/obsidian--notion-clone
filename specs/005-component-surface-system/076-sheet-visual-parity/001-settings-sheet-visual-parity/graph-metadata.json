@@ -39,23 +39,28 @@
       "six"
     ],
     "importance_tier": "normal",
-    "status": "draft",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "implementation-summary.md",
       "src/views/view-config-panel-renderer.ts",
       "styles.css",
       "src/i18n.ts",
-      "tools/screenshots/constructed-scenarios.mjs",
+      "src/views/folder-suggest-modal.ts",
+      "src/views/modals/settings-sub-sheet-modal.ts",
+      "src/views/modals/add-database-modal.ts",
+      "src/views/database-view.ts",
       "tools/live/sheet-grammar.mjs",
-      "tools/live/sheet-rebuild.mjs",
-      "tools/screenshots/theme.css",
-      "src/i18n.test.ts",
-      "tools/lane/check-lane.mjs",
-      "tools/screenshots/capture.mjs"
+      "tools/live/render-assertion-harness.ts",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/storybook/obsidian-stub.mjs",
+      "src/views/view-config-sheet-row-grammar.test.ts",
+      "tools/storybook/sheet-inventory.mjs",
+      "tools/live/sheet-rebuild.mjs"
     ],
     "entities": [
       {
@@ -89,6 +94,12 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "view-config-panel-renderer.ts",
         "kind": "code",
         "path": "src/views/view-config-panel-renderer.ts",
@@ -107,9 +118,27 @@
         "source": "derived"
       },
       {
-        "name": "constructed-scenarios.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "name": "folder-suggest-modal.ts",
+        "kind": "code",
+        "path": "src/views/folder-suggest-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "settings-sub-sheet-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/settings-sub-sheet-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "add-database-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/add-database-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
         "source": "derived"
       },
       {
@@ -119,33 +148,39 @@
         "source": "derived"
       },
       {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "obsidian-stub.mjs",
+        "kind": "file",
+        "path": "tools/storybook/obsidian-stub.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-sheet-row-grammar.test.ts",
+        "kind": "test",
+        "path": "src/views/view-config-sheet-row-grammar.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-inventory.mjs",
+        "kind": "file",
+        "path": "tools/storybook/sheet-inventory.mjs",
+        "source": "derived"
+      },
+      {
         "name": "sheet-rebuild.mjs",
         "kind": "file",
         "path": "tools/live/sheet-rebuild.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "theme.css",
-        "kind": "file",
-        "path": "tools/screenshots/theme.css",
-        "source": "derived"
-      },
-      {
-        "name": "i18n.test.ts",
-        "kind": "test",
-        "path": "src/i18n.test.ts",
-        "source": "derived"
-      },
-      {
-        "name": "check-lane.mjs",
-        "kind": "file",
-        "path": "tools/lane/check-lane.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "capture.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/capture.mjs",
         "source": "derived"
       },
       {
@@ -171,41 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Parent Packet",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Phase Context",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Settings Sheet",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The Settings sheet is one large white card wrapped around a form of bordered text inputs and helper paragraphs; Notion's equivalent is a table of contents built from several inset cards of navigation rows",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-10T20:38:45.866Z",
+    "last_save_at": "2026-09-11T01:13:30.432Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,14 +218,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:0c79c3981bdae1654cd71a9b838f4a447f4d2c473195804cce3c9c70431f153e",
+    "source_fingerprint": "sha256:5d6ef29b88031cfb525b9a4635c5f2ac87bba164ccbe630563eb5aab277e489b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "e34894e1bef65717de09a7a7d164995c01d03997e1057bdc0522f9bfdeac0172",
+      "spec.md": "034dbcb47701639f2e69ac619824da071645eac560ca75fabe492ef0f2e6b9bb",
       "plan.md": "6695c77636c65557b3a6f4c6181bae60b5c7f6cb2dac166b2799d9f8359c1952",
-      "tasks.md": "4b0aed1af4fd45d1eff053938a5578f3af7e1e0a0674485aca3e62074a928cf4"
+      "tasks.md": "b6fee059c9534e7931dd9c38a0f507b3ffc5a223ec1ce95e00aa53abff5df550",
+      "implementation-summary.md": "1b73e06198e21bf0c8543b7ca197a22c9d87dae093296ff2731e80a1950da7e4"
     },
     "last_active_at": null
   }

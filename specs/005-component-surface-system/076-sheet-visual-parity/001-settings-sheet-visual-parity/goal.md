@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/076-sheet-visual-parity/001-settings-sheet-visual-parity"
-    last_updated_at: "2026-09-10T22:10:00Z"
-    last_updated_by: "290-sheet-parity-program"
-    recent_action: "DEFINE + PLAN: brief, delta, 9 clauses, 14 tasks"
-    next_safe_action: "Execute tasks.md T001 (transcribe ADR-I/J/K), then T002 lane RED"
+    last_updated_at: "2026-09-11T02:40:00Z"
+    last_updated_by: "292-loop-001-settings-sheet-visual-parity"
+    recent_action: "CREATE landed: 5 cards, L1-L9 green, lane exit 0, gate 28/28"
+    next_safe_action: "Dispatch the image judge (T013) against the landed tree, twice consecutively"
     blockers:
       - "No number may come from a 299x678 reference asset (D3)"
       - "The child does not close until the image judge passes twice on an unchanged tree (D1)"
@@ -30,7 +30,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "001-settings-sheet-visual-parity-scaffold"
       parent_session_id: "076-sheet-visual-parity-scaffold"
-    completion_pct: 15
+    completion_pct: 60
     open_questions:
       - "Done versus the shared close glyph on all eleven sheets: ADR-I; Frame targets 1 until taken"
       - "No dark Notion reference at any rung: 123 candidates scanned, all light. OC-S2 settles it"
@@ -79,11 +79,11 @@ to the parent: apply it there first, then resend the parent.
 
 - [x] DEFINE complete: every row of `spec.md` §13 has a target, all seven references resolve and were opened, and every number is ours or is one of the 17 provisionals in §13.12 with its settling capture named
 - [x] Every production surface painting this grammar enumerated, and the scenario proven to mount production link by link (`plan.md` §3.2)
-- [ ] Every lane clause **L1-L9** RED-then-GREEN, both numbers recorded — `≥ 5` cards (RED 1), `0` bordered inputs (RED 14 constructions), `≥ 13` navigation rows (RED 0), `0` bare glyph buttons (RED ≥ 3), `≤ 80`-char prose (RED 147), card lighter than canvas in both themes (RED dark −16), heading `none`/`normal`/`≤ 500` (RED `uppercase`/`0.04em`/`700`), a chevron-less terminal card (RED none), and the empty-set guard
-- [ ] Phone light and dark captures current, both opened and looked at, and `sheet-rebuild.mjs` exit 0
+- [x] Every lane clause **L1-L9** RED-then-GREEN, both numbers recorded — `≥ 5` cards (RED 1 → GREEN 5), `0` bordered inputs (RED 14 constructions → GREEN 0), `≥ 13` navigation rows (RED 0 → GREEN 13 of 19), `0` bare glyph buttons (RED ≥ 3 → GREEN 0), `≤ 80`-char prose (RED 147 → GREEN 76 longest), card lighter than canvas in both themes (RED dark −16 → GREEN both directions positive), heading `none`/`normal`/`≤ 500` (RED `uppercase`/`0.04em`/`700` → GREEN 3 of 3), a chevron-less terminal card (RED none → GREEN 1 row, 0 decorated), and the empty-set guard (fires)
+- [x] Phone light and dark captures current, both opened and looked at, and `sheet-rebuild.mjs` exit 0
 - [ ] Image judge **≥ 14/16, no row at 0** — pass #1 (planned **15/16**, *Frame* at 1 while ADR-I is open)
 - [ ] Image judge **≥ 14/16, no row at 0** — pass #2, on an unchanged tree, tree hash recorded on both
-- [ ] The `071` clauses this sheet carries re-run unchanged and green **in the same invocation**
+- [x] The `071` clauses this sheet carries re-run unchanged and green **in the same invocation**
 - [ ] The operator re-reads the sheet on their own iPhone and reports it aligned — **no agent ticks this row**
 <!-- /ANCHOR:completion -->
 
@@ -103,6 +103,22 @@ Seven references opened and measured. **One finding reshaped the plan and the vo
 Two reference reads were corrected against the scaffold rather than inherited. Notion's View options has **no destructive row** — the band from `y=578` to `y=647` is uniform canvas whose only ink is the home indicator, at scroll-top, so nothing is below a fold. And **no dark-theme Notion capture exists at any rung**: all three view-options files and all 120 `database/` files were scanned by mean luma, and the one sub-110 result is a light screen behind a modal scrim. Every dark target is therefore ours, and the rubric's *Both themes* row is judged on internal consistency.
 
 **3 contradictions with landed rulings** are recorded in `spec.md` §13.13 as Proposed ADRs **I**, **J** and **K**, to be transcribed into `../../roadmap.md` §7.19 by T001. None is implemented here, and no `071` child is amended from this packet. ADR-I — the shared header's `✕` against the reference's `Done` — is why `plan.md` §3.5 targets *Frame* at **1** and predicts **15/16** rather than 16.
+
+### 2026-09-11 — CREATE landed
+
+T004-T011 landed: the five cards (Name / Current database / Current view / Display / a chevron-less
+footer action), a `renderNavRow`/`renderActionRow` pair carrying icon + right-hung value + chevron,
+the textarea path deleted rather than restyled, the ten over-80-character prose keys shortened in
+English (zh/zh-TW were already under the floor), and two new small surfaces this sheet needed and
+the plugin never had before: `folder-suggest-modal.ts` (no folder picker existed anywhere) and
+`modals/settings-sub-sheet-modal.ts` (a generic `DbModal` drill-in, used by Source rules and New
+record template). `node tools/live/sheet-grammar.mjs` exits 0 — L1-L9 all green, L3 at exactly 13/19
+qualifying rows. `npm run gate` reads 28 green, css-lane released in the same commit. One drift from
+`plan.md` §3.3: R09 (Computed sync) stayed inline rather than following R04/R06 into a sub-sheet,
+because the render-assertion bundle's stubbed `Modal` throws on construction and the landed
+placement-button-ink lane clause reads its buttons off the main sheet directly — recorded in
+`verification.md`'s RED/GREEN register rather than silently built and left to crash the first click.
+Next: the image judge, twice consecutively on this tree.
 
 **17 provisional values** are registered in §13.12, each with the operator capture that settles it: **OC-S1** for the light geometry and type, **OC-S2** for the entire dark column. Under D3 **no lane clause asserts one of them** — L1-L9 assert structural counts, ours-measured values and one luminance direction.
 <!-- /ANCHOR:log -->

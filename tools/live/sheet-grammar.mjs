@@ -328,6 +328,34 @@ const SETTINGS_ROW_PITCH_MAX_PX = 52;
 // tighter than 8px so the retune that follows the operator's own capture stays inside the band.
 const SETTINGS_CARD_RADIUS_MIN_PX = 8;
 const SETTINGS_CARD_GAP_MIN_PX = 8;
+// The visual-parity thresholds. Each one is a count or a direction the settings sheet's reference
+// read measured, stated here so the caller applies thresholds and never invents one. They
+// deliberately restate nothing the grouping clauses above already own — the radius and gap floors
+// are theirs — they only add what those clauses cannot see: how many cards there must be, what
+// the controls' borders, the navigation anatomy, the prose tier, the two themes' luminance
+// direction, the heading's four computed faces, and the terminal action card measure.
+const SETTINGS_CARD_COUNT_MIN = 5;
+const SETTINGS_BORDERED_CONTROL_MAX = 0;
+const SETTINGS_NAV_ROW_MIN = 13;
+const SETTINGS_NAV_ROW_MIN_HEIGHT_PX = 44;
+const SETTINGS_NAV_ROW_CENTRE_TOLERANCE_PX = 4;
+const SETTINGS_NAV_ROW_VALUE_GAP_TOLERANCE_PX = 14;
+const SETTINGS_ICON_ONLY_BUTTON_MAX = 0;
+const SETTINGS_PROSE_MAX_CHARS = 80;
+const SETTINGS_SECTION_HEADING_WEIGHT_MAX = 500;
+
+// A navigation row qualifies when every one of the reference's four anatomy facts holds at once:
+// the leading icon, the trailing chevron, the value hung right while sharing the label's line,
+// and the 44px thumb floor. A value that is itself the dropdown trigger forgives the text-align
+// read (its right-hung-ness is the flex construction); a plain value div must state the
+// alignment itself, because nothing else distinguishes it from a caption.
+const parityNavRowsFilter = (rows) => rows.filter((row) =>
+  row.icon && row.chevron && row.valuePresent &&
+  row.centerDelta <= SETTINGS_NAV_ROW_CENTRE_TOLERANCE_PX &&
+  row.height >= SETTINGS_NAV_ROW_MIN_HEIGHT_PX - 0.5 &&
+  (row.valueIsTrigger || row.valueTextAlign === "right") &&
+  row.valueGapToChevron <= SETTINGS_NAV_ROW_VALUE_GAP_TOLERANCE_PX
+);
 // `--font-ui-small` at the operator's 16px default (15px) and at a size proven to overflow under
 // the host model this page now carries. Set directly on the button rather than resolved from
 // `--font-text-size`: this harness, unlike a real host, never defines that token, and deriving it
@@ -1742,6 +1770,13 @@ const measureSettingsRowGrammar = () => {
     // hairline is owed.
     const titlePrev = title.previousElementSibling;
     sections.push({
+      // The heading's four computed faces: sentence case, unspaced, regular, and the 13px the
+      // reference's cap height scales to. Recorded raw so the caller's verdict prints what a
+      // differing heading actually computes, not just that it differs.
+      textTransform: style.textTransform,
+      letterSpacing: style.letterSpacing,
+      fontWeight: Number.parseFloat(style.fontWeight) || 0,
+      fontSize: style.fontSize,
       paddingLeft: Number.parseFloat(style.paddingLeft) || 0,
       divider: dividerStyle.content === "none" ? null : {
         height: Number.parseFloat(dividerStyle.height) || 0,
@@ -1767,10 +1802,70 @@ const measureSettingsRowGrammar = () => {
       bottom: rect.bottom,
     };
   });
+  // The visual-parity grammar. A navigation row is the reference's one-line router: a leading icon,
+  // a right-hung secondary value sharing the label's own line, a trailing chevron, the row at the
+  // thumb floor. Geometry only — which rows qualify, and by how much they miss, is the caller's
+  // judgement; here every candidate reports the facts the judgement reads.
+  const navRows = Array.from(sheet.querySelectorAll(".obnotion-settings-nav-row")).map((row) => {
+    const rowRect = row.getBoundingClientRect();
+    const labelRect = row.querySelector(":scope > .obnotion-view-config-label")?.getBoundingClientRect();
+    const valueEl = row.querySelector(":scope .obnotion-settings-nav-row-value");
+    const valueRect = valueEl?.getBoundingClientRect();
+    const chevronEl = row.querySelector(":scope > .obnotion-settings-nav-row-chevron");
+    const chevronRect = chevronEl?.getBoundingClientRect();
+    const iconWrap = row.querySelector(":scope > .obnotion-settings-nav-row-icon");
+    return {
+      label: row.querySelector(":scope > .obnotion-view-config-label")?.textContent ?? null,
+      icon: Boolean(iconWrap && iconWrap.querySelector("svg")),
+      valuePresent: Boolean(valueEl),
+      // A value that is itself the dropdown trigger carries its alignment by construction; a
+      // plain value div must state text-align: right to count as right-hung.
+      valueIsTrigger: valueEl?.classList.contains("obnotion-view-config-dropdown") === true,
+      valueTextAlign: valueEl ? getComputedStyle(valueEl).textAlign : null,
+      valueRight: valueRect?.right ?? 0,
+      valueGapToChevron: valueRect && chevronRect ? chevronRect.left - valueRect.right : 999,
+      centerDelta:
+        labelRect && valueRect
+          ? Math.abs(labelRect.top + labelRect.height / 2 - (valueRect.top + valueRect.height / 2))
+          : 999,
+      height: rowRect.height,
+      chevron: Boolean(chevronEl && chevronEl.querySelector("svg")),
+    };
+  });
+  // The reference borders no text control to name or to choose, so the count it leaves behind is
+  // the whole defect: one number over every text input and textarea the body renders.
+  const borderedControlCount = Array.from(
+    sheet.querySelectorAll('.obnotion-view-config-body input[type="text"], .obnotion-view-config-body textarea')
+  ).filter((el) => {
+    const s = getComputedStyle(el);
+    return [s.borderTopWidth, s.borderRightWidth, s.borderBottomWidth, s.borderLeftWidth]
+      .some((width) => (Number.parseFloat(width) || 0) > 0);
+  }).length;
+  // The reference's add affordances are labelled rows, not glyph strips: a button whose entire
+  // announcement is an icon. Counted over the main body only — a drill-in editor sheets its own
+  // buttons onto a second surface the reference never shows next to these rows.
+  const iconOnlyButtonCount = Array.from(
+    sheet.querySelectorAll(".obnotion-view-config-body button")
+  ).filter((button) => button.textContent.trim() === "" && button.querySelector("svg")).length;
+  // The terminal action card: the sheet's last card carries the footer marker, and nothing inside
+  // it advertises a journey — no chevron, no trailing value, only the action row itself.
+  const footerCard = sheet.querySelector(".obnotion-view-config-body > .obnotion-settings-card:last-child");
+  const footerRows = footerCard
+    ? Array.from(footerCard.querySelectorAll(":scope > .obnotion-panel-row"))
+    : [];
+  const footerDecoratedRows = footerRows.filter((row) =>
+    Boolean(row.querySelector(":scope .obnotion-settings-nav-row-chevron")) ||
+    (row.querySelector(":scope .obnotion-settings-nav-row-value")?.textContent ?? "").trim() !== ""
+  ).length;
   return {
     rows,
     sections,
     cards,
+    navRows,
+    borderedControlCount,
+    iconOnlyButtonCount,
+    footerRowCount: footerRows.length,
+    footerDecoratedRows,
     canvasBackground: getComputedStyle(sheet).backgroundColor,
     nativeSelectCount: sheet.querySelectorAll("select").length,
     sheetActionRowCount: sheet.querySelectorAll(".obnotion-settings-sheet-action").length,
@@ -1875,6 +1970,101 @@ window.__shellSettingsRowGrammarColumnControl = (scenario) => {
   });
   style.remove();
   return broken;
+};
+
+// The two themes' luminance direction, read where the reference itself is judged: the computed
+// card fill against the computed sheet canvas, theme by theme. The harness pins one background
+// token for the whole page, so each leg pins its own value, measures, and restores both the
+// class and the inline property exactly as it found them — a probe that leaks its theme would
+// tint every clause mounted after it.
+window.__shellSettingsThemeLuminance = (scenario) => {
+  let result = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    const docEl = document.documentElement;
+    const hadDark = document.body.classList.contains("theme-dark");
+    const pinned = docEl.style.getPropertyValue("--background-primary");
+    // WCAG relative luminance, from either colour serialisation: this lane's two engines split
+    // between rgb(a) triples and color(srgb ...) — the existing isOpaqueColor above already
+    // carries both — so the reader does too. srgb channels arrive gamma-encoded and are
+    // linearised; srgb-linear arrives already linear. The sign the reference asks for is
+    // perceptual, not the raw channel difference — a 16-unit channel step at the dark end is not
+    // 16 units at the light one. Parsed with string ops, not escapes: this code lives inside the
+    // bundle's template literal, where a single-escaped backslash does not survive to the regex.
+    const luminance = (value) => {
+      if (!value) return null;
+      const open = value.indexOf("(");
+      const close = value.lastIndexOf(")");
+      if (open < 0 || close < 0 || close <= open) return null;
+      const fn = value.slice(0, open).trim();
+      const tokens = value
+        .slice(open + 1, close)
+        .split(" ").join(",").split(",").join(",")
+        .split(",")
+        .map((token) => Number.parseFloat(token))
+        .filter((n) => Number.isFinite(n));
+      if (tokens.length < 3) return null;
+      const perUnit = fn.startsWith("rgb") ? 1 / 255 : 1;
+      const linearise = (c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+      const channels = tokens.slice(0, 3).map((c) => c * perUnit);
+      const [r, g, b] = value.includes("linear") ? channels : channels.map(linearise);
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const readPair = () => {
+      const sheet = document.querySelector(".obnotion-view-config-panel.obnotion-mobile-bottom-sheet");
+      if (!sheet) return null;
+      const card = sheet.querySelector(".obnotion-view-config-body > .obnotion-settings-card");
+      return {
+        canvas: getComputedStyle(sheet).backgroundColor,
+        card: card ? getComputedStyle(card).backgroundColor : null,
+      };
+    };
+    // Leg one: the light theme — the page's pinned #1e1e1e replaced by the page-white it stands
+    // in for. Leg two: dark, the pin restored. Both legs read the same boxes the grouping
+    // clause measures.
+    document.body.classList.remove("theme-dark");
+    docEl.style.setProperty("--background-primary", "#ffffff");
+    const light = readPair();
+    document.body.classList.add("theme-dark");
+    docEl.style.setProperty("--background-primary", "#1e1e1e");
+    const dark = readPair();
+    if (pinned) docEl.style.setProperty("--background-primary", pinned);
+    else docEl.style.removeProperty("--background-primary");
+    if (hadDark) document.body.classList.add("theme-dark");
+    else document.body.classList.remove("theme-dark");
+    result = {
+      light,
+      dark,
+      lightCardLuminance: luminance(light?.card),
+      lightCanvasLuminance: luminance(light?.canvas),
+      darkCardLuminance: luminance(dark?.card),
+      darkCanvasLuminance: luminance(dark?.canvas),
+    };
+  });
+  return result;
+};
+
+// The vacuity guard's own control: the landed control-width clause reads a stack-row set, and a
+// set that quietly empties reports 0 of 0 — a pass that measures nothing. This control empties
+// the set in place (the stack class comes off the very fields the clause selected, inside the
+// second mount, because every mount renders fresh) so the caller can watch the guard report the
+// emptiness rather than let it slip through as a triumph.
+window.__shellSettingsEmptyStackControl = (scenario) => {
+  let stacked = 0;
+  runRenderAssertions(document.body, scenario, "", () => {
+    const sheet = document.querySelector(".obnotion-view-config-panel.obnotion-mobile-bottom-sheet");
+    if (!sheet) return;
+    stacked = sheet.querySelectorAll(".obnotion-view-config-field-stack").length;
+  });
+  let emptied = 0;
+  runRenderAssertions(document.body, scenario, "", () => {
+    const sheet = document.querySelector(".obnotion-view-config-panel.obnotion-mobile-bottom-sheet");
+    if (!sheet) return;
+    for (const stack of Array.from(sheet.querySelectorAll(".obnotion-view-config-field-stack"))) {
+      stack.classList.remove("obnotion-view-config-field-stack");
+    }
+    emptied = measureSettingsRowGrammar()?.rows.filter((row) => row.stack).length ?? -1;
+  });
+  return { stacked, emptied };
 };
 
 // The divider-inset grammar on the two toolbar sheets whose plain rows sit at the shared inset
@@ -4654,6 +4844,123 @@ try {
   } else {
     console.log(`  PASS  ${settingsCardGrammar.sheetActionRowCount} sheet-action row(s) render inside the sheet's own trailing card`);
   }
+  console.log("");
+
+  console.log("sheet-grammar: settings sheet visual parity — five cards, borderless inline controls, the navigation anatomy, no icon-only glyph, prose no longer than the reference carries, the card lighter than its canvas in both themes, a sentence-case 13px/400 section heading, and a terminal action card\n");
+  const parity = settingsRowGrammar;
+  // The card count. Radius and inter-card floors are the grouping clause's above; this clause
+  // owns how many sections the reference groups into.
+  const parityCardCount = parity?.cards?.length ?? 0;
+  if (!parity || parityCardCount < SETTINGS_CARD_COUNT_MIN) {
+    failures.push(`settings sheet visual parity: ${parityCardCount} card container(s) on the sheet canvas, wanted >= ${SETTINGS_CARD_COUNT_MIN}`);
+  }
+  console.log(`  ${parityCardCount >= SETTINGS_CARD_COUNT_MIN ? "PASS" : "FAIL"}  ${parityCardCount} cards render (wanted >= ${SETTINGS_CARD_COUNT_MIN}); their radius and gap floors are the grouping clause's above`);
+  // The borders. One number: every text input and textarea the body renders that still carries
+  // a computed border on any side.
+  const parityBordered = parity?.borderedControlCount ?? -1;
+  if (parityBordered < 0) {
+    failures.push("settings sheet visual parity: the surface did not mount, so no borderless-control count could be read");
+    console.log("  FAIL  the surface did not mount — no text control to count");
+  } else if (parityBordered !== SETTINGS_BORDERED_CONTROL_MAX) {
+    failures.push(`settings sheet visual parity: ${parityBordered} bordered text control(s) render in the sheet body, wanted 0`);
+  }
+  console.log(`  ${parityBordered === SETTINGS_BORDERED_CONTROL_MAX ? "PASS" : "FAIL"}  ${parityBordered} bordered text control(s) in the body (wanted 0 — naming and choosing are row work, not boxed work)`);
+  // The navigation anatomy. A row qualifies when all four of the facts the reference reads hold:
+  // leading icon, right-hung value sharing the label's line, trailing chevron, the 44px floor.
+  const parityNavRows = parity?.navRows ?? [];
+  const qualifyingNavRows = parityNavRowsFilter(parityNavRows);
+  if (qualifyingNavRows.length < SETTINGS_NAV_ROW_MIN) {
+    failures.push(`settings sheet visual parity: ${qualifyingNavRows.length} of ${parityNavRows.length} navigation rows carry icon, right-hung value and chevron at the thumb floor, wanted >= ${SETTINGS_NAV_ROW_MIN}`);
+  }
+  console.log(`  ${qualifyingNavRows.length >= SETTINGS_NAV_ROW_MIN ? "PASS" : "FAIL"}  ${qualifyingNavRows.length}/${parityNavRows.length} navigation rows carry the full anatomy (worst centre delta ${parityNavRows.length ? Math.max(...parityNavRows.map((row) => row.centerDelta === 999 ? 0 : row.centerDelta)).toFixed(1) : "0.0"}px, shortest ${parityNavRows.length ? Math.min(...parityNavRows.map((row) => row.height)).toFixed(1) : "0.0"}px)`);
+  if (qualifyingNavRows.length < SETTINGS_NAV_ROW_MIN) {
+    const short = parityNavRows.filter((row) => !parityNavRowsFilter([row]).length).map((row) => row.label || "(no label)");
+    console.log(`    short of anatomy: ${short.join(", ")}`);
+  }
+  // The glyph strips. Buttons that announce only an icon: the count the reference reduces to 0.
+  const parityIconOnly = parity?.iconOnlyButtonCount ?? -1;
+  if (parityIconOnly < 0) {
+    failures.push("settings sheet visual parity: the surface did not mount, so no icon-only button count could be read");
+    console.log("  FAIL  the surface did not mount — no buttons to count");
+  } else if (parityIconOnly > SETTINGS_ICON_ONLY_BUTTON_MAX) {
+    failures.push(`settings sheet visual parity: ${parityIconOnly} icon-only button(s) render in the sheet body, wanted 0`);
+  }
+  console.log(`  ${parityIconOnly === SETTINGS_ICON_ONLY_BUTTON_MAX ? "PASS" : "FAIL"}  ${parityIconOnly} icon-only button(s) in the body (wanted 0 — add affordances are labelled rows)`);
+  // The prose tier. Read through the shipped t() lookup in all three locales, over the key set
+  // the producer itself names — the same derivation the sheet-copy clause runs, narrowed to the
+  // producer whose sheet this is. A key that resolves to its own spelling never mounted.
+  const parityProducerSource = readFileSync(join(REPO, "src", "views", "view-config-panel-renderer.ts"), "utf8");
+  const parityProseKeys = new Set();
+  for (const match of parityProducerSource.matchAll(/"([a-z][a-zA-Z0-9]*(?:\.[a-zA-Z0-9]+)+)"/g)) {
+    parityProseKeys.add(match[1]);
+  }
+  const parityProseRows = await page.evaluate((keys) => window.__sheetCopyProbe(keys), [...parityProseKeys].sort());
+  const parityLongRuns = parityProseRows.filter((row) => row.value !== row.key && row.value.length > SETTINGS_PROSE_MAX_CHARS);
+  if (parityLongRuns.length > 0) {
+    failures.push(`settings sheet visual parity: ${parityLongRuns.length} sheet-reached prose run(s) exceed ${SETTINGS_PROSE_MAX_CHARS} characters: ${parityLongRuns.map((row) => `${row.key} (${row.locale}, ${row.value.length})`).join(", ")}`);
+  }
+  const parityLongest = parityProseRows.reduce((longest, row) => (row.value.length > longest.value.length ? row : longest), { key: "-", locale: "-", value: "" });
+  console.log(`  ${parityLongRuns.length === 0 ? "PASS" : "FAIL"}  longest of ${parityProseKeys.size} sheet-reached keys in 3 locales: ${parityLongest.value.length} chars (${parityLongest.key}, ${parityLongest.locale}); ${parityLongRuns.length} run(s) over ${SETTINGS_PROSE_MAX_CHARS} characters`);
+  // The themes' luminance direction. One clause, two legs: the card must be lighter than its
+  // canvas in both, because there is no dark reference — the direction is the invariant.
+  const parityLuminance = await page.evaluate((scenario) => window.__shellSettingsThemeLuminance(scenario), SETTINGS_SHEET_SURFACE.spec);
+  if (!parityLuminance?.light?.card || !parityLuminance?.dark?.card || parityLuminance.lightCardLuminance == null || parityLuminance.darkCardLuminance == null) {
+    failures.push("settings sheet visual parity: no card or canvas colour resolved in one of the themes, so the luminance direction could not be signed");
+    console.log(`  FAIL  luminance unreadable (light card ${parityLuminance?.light?.card}, canvas ${parityLuminance?.light?.canvas}; dark card ${parityLuminance?.dark?.card}, canvas ${parityLuminance?.dark?.canvas})`);
+  } else {
+    const parityLightDirection = parityLuminance.lightCardLuminance - parityLuminance.lightCanvasLuminance;
+    const parityDarkDirection = parityLuminance.darkCardLuminance - parityLuminance.darkCanvasLuminance;
+    const parityThemeOk = parityLightDirection > 0 && parityDarkDirection > 0;
+    if (!parityThemeOk) {
+      failures.push(`settings sheet visual parity: the card must be lighter than its canvas in both themes (light ${parityLightDirection >= 0 ? "+" : ""}${parityLightDirection.toExponential(2)}, dark ${parityDarkDirection >= 0 ? "+" : ""}${parityDarkDirection.toExponential(2)} relative luminance)`);
+    }
+    console.log(`  ${parityThemeOk ? "PASS" : "FAIL"}  card vs canvas: light ${parityLuminance.light.card} on ${parityLuminance.light.canvas}, dark ${parityLuminance.dark.card} on ${parityLuminance.dark.canvas}`);
+  }
+  // The section heading's four faces. Every heading the sheet draws, no exceptions — a heading
+  // that keeps one old face while three comply is the drift this clause exists to catch.
+  const parityHeadings = parity?.sections ?? [];
+  if (parityHeadings.length === 0) {
+    failures.push("settings sheet visual parity: no section heading mounted, so the type faces could not be read");
+    console.log("  FAIL  no section heading to read");
+  } else {
+    const parityHeadingOff = parityHeadings.filter((heading) =>
+      heading.textTransform !== "none" || heading.letterSpacing !== "normal" || heading.fontWeight > SETTINGS_SECTION_HEADING_WEIGHT_MAX
+    );
+    if (parityHeadingOff.length > 0) {
+      failures.push(`settings sheet visual parity: ${parityHeadingOff.length} of ${parityHeadings.length} section headings do not compute sentence case, unspaced and regular (first: transform ${parityHeadingOff[0].textTransform}, spacing ${parityHeadingOff[0].letterSpacing}, weight ${parityHeadingOff[0].fontWeight}, size ${parityHeadingOff[0].fontSize})`);
+    }
+    console.log(`  ${parityHeadingOff.length === 0 ? "PASS" : "FAIL"}  ${parityHeadings.length - parityHeadingOff.length}/${parityHeadings.length} section headings compute none/normal/<=${SETTINGS_SECTION_HEADING_WEIGHT_MAX} (size ${parityHeadings[0].fontSize}, weight ${parityHeadings[0].fontWeight}, transform ${parityHeadings[0].textTransform}, spacing ${parityHeadings[0].letterSpacing})`);
+  }
+  // The terminal action card, and the vacuity guard beneath it. The trailing card must carry the
+  // footer marker, and nothing inside it may advertise a journey.
+  const parityTrailing = parity?.trailingCard === true;
+  const parityFooterRows = parity?.footerRowCount ?? 0;
+  const parityFooterDecorated = parity?.footerDecoratedRows ?? 0;
+  if (!parity || !parityTrailing) {
+    failures.push(`settings sheet visual parity: the sheet's last card does not carry the footer marker (${parityFooterRows} row(s) render inside it)`);
+  } else if (parityFooterDecorated > 0) {
+    failures.push(`settings sheet visual parity: ${parityFooterDecorated} of ${parityFooterRows} footer row(s) carry a chevron or a trailing value, wanted 0 — a terminal action announces itself, it does not journey`);
+  }
+  console.log(`  ${parityTrailing && parityFooterDecorated === 0 ? "PASS" : "FAIL"}  the last card is the footer card (${parityFooterRows} row(s), ${parityFooterDecorated} decorated)`);
+  // The vacuity guard. The landed control-width clause reads the stack-row set; when the producer
+  // empties that set the clause would report 0 of 0 and pass on nothing. The guard turns the
+  // emptiness into a printed report — here on the mounted sheet, and again through the control
+  // that empties the set on purpose, which is how the guard proves it can still fire.
+  const parityStackRows = (parity?.rows ?? []).filter((row) => row.stack);
+  const parityGuardMessage = (count, scope) => {
+    if (count !== 0) return null;
+    const message = `${scope}: 0 stack rows — the control-width clause measures an empty set; reported, not vacuous`;
+    console.log(`  GUARD  ${message}`);
+    return message;
+  };
+  parityGuardMessage(parityStackRows.length, "the mounted sheet");
+  const parityEmptyControl = await page.evaluate((scenario) => window.__shellSettingsEmptyStackControl(scenario), SETTINGS_SHEET_SURFACE.spec);
+  const parityEmptyCount = parityEmptyControl?.emptied ?? -1;
+  const parityGuardFired = parityEmptyCount === 0 && parityGuardMessage(parityEmptyCount, "the emptied control") != null;
+  if (!parityEmptyControl || !parityGuardFired) {
+    failures.push(`settings sheet visual parity: the emptied-set control measured ${parityEmptyControl?.stacked} stack row(s) before and ${parityEmptyCount} after, and the guard ${parityGuardFired ? "reported" : "did not report"} the emptiness — an emptied set must not pass silently`);
+  }
+  console.log(`  ${parityGuardFired ? "PASS" : "FAIL"}  the vacuity guard fires on an emptied set (${parityEmptyControl?.stacked} stack rows mounted, ${parityEmptyCount} after the stacks come off)`);
   console.log("");
 
   const settingsRowGrammarControl = await page.evaluate((scenario) => window.__shellSettingsRowGrammarNegativeControl(scenario), SETTINGS_SHEET_SURFACE.spec);

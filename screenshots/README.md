@@ -925,13 +925,13 @@ Sources: `src/views/sort-panel-renderer.ts`, `tools/bench/table-render-bench.ts`
 
 ### View configuration panel (constructed)
 
-ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw.
+ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw. `src/i18n.ts` is in this list because 076/001's prose-length fix moves sheet-reached copy, and without it here a copy-only change would leave this capture's freshness check reporting current.
 
 | dark | light |
 |---|---|
 | ![constructed-view-config dark](notion-clone/panels/constructed-view-config-mobile-dark.png) | ![constructed-view-config light](notion-clone/panels/constructed-view-config-mobile-light.png) |
 
-Sources: `src/views/view-config-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`
+Sources: `src/views/view-config-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/i18n.ts`
 
 ### Group-by sheet — mobile bottom sheet
 
