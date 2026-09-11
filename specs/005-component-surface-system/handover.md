@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T01:05:00Z"
-    last_updated_by: "286-dr-filter-actions"
-    recent_action: "008 root-group rows labelled, landed 8f720b62: 2x rebase, 2x judged recapture, gate 28/0"
+    last_updated_at: "2026-09-11T02:05:00Z"
+    last_updated_by: "012-board-card-fields"
+    recent_action: "012 board card fields landed+verified 5662ec30: 2x crossing rebase, judged movers, gate 28/0"
     next_safe_action: "Execute 076/002 T001 (transcribe ADR-L/M), then T002 lands L1-L6 RED"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
@@ -628,6 +628,28 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-11 ~02:05, 012-board-card-fields LANDED+VERIFIED (5662ec30) — worktree `296-loop-012-board-card-fields`
+
+**What this verification leg did** — landed the board-card leg (property rows at full card width, one
+field per line; `1566409a`) onto main through TWO upstream crossings, after the first lander went
+silent mid-run with its re-derivation uncommitted. The leg's RED→GREEN was mutation-verified by
+two runs of the producer revert (`git checkout` of the pre-012 `styles.css`, the leg's single hunk):
+exactly 2 assertions fail — meta grid 2@1440/1@340 and 72/306 painted names clipped, worst
+"withdrawn" by 29px — restore → green, the other 155 untouched. Crossing 1: 286/071-008 (8 commits,
+44cffb8b..dbb5e7ca) forced a second rebase whose generated-side conflicts resolved to main's
+witnesses, then re-derived: the manifest re-stamped styles.css 2c86ecdbf16c → **4b0cdd3a637f**, three
+REAL movers judged by decoded pixel delta (constructed-board-title-format-filename-desktop-dark
+**1014232px@218** — 286's filename-title markup photographed on this packet's taller card —
+field-status-colors-mobile-dark **19px@192**, board-view-desktop-dark **6px@1**, the latter two
+identical across both judged runs), a one-run 1px@1 mover restored itself, and the css lane gained a
+second corrective 012 acquire/edit/release triplet (same judged hash — 286 touched the filter panel's
+markup, not styles.css) re-pointing baselineCommit at dbb5e7ca. Crossing 2: the 0.0.39 cut (cfa64f79)
+witnessed no hash; its residue commit carries only the 8 evidence re-stamps. Battery from the final
+tree: vitest **1617/1617**, tsc 0, build 0, gate **28 green, 0 red** (exit 0), scan-comments 0,
+scan-failing-values 0, RESULT: **PASSED** on 012, 076 and 005 --strict (005 needed one scoped
+backfill after the crossing left a SOURCE_FINGERPRINT_MISMATCH; failed []). Push attempt 1 rejected
+(the cut landed meanwhile), attempt 2 landed **5662ec30** on `origin/main`, pushed.
 
 ### 2026-09-10 ~23:45, 074 testbed-generator folder ruling LANDED+VERIFIED (2ecaa2af) — worktree `291-testbed-generator`
 
