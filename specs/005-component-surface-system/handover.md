@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T08:10:00Z"
-    last_updated_by: "304-research-076"
-    recent_action: "Synthesized 076 three-lineage research fan-out into research/research.md"
+    last_updated_at: "2026-09-11T06:25:52Z"
+    last_updated_by: "301-loop-003-filter-sheet-visual-parity"
+    recent_action: "076/003 filter CREATE landed+verified 7776ae7db: mutations red->green, gate 28/0, judge owed"
     next_safe_action: "Fix the D7/lane card-container contradiction (research.md Rec a1), then JUDGE re-scores 076/002 twice on 2736c2cda"
     blockers:
       - "Open rows past this point are operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK)"
@@ -724,6 +724,51 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-11 ~08:25, `076/003-filter-sheet-visual-parity` CREATE LANDED+VERIFIED (7776ae7db) — worktree `301-loop-003-filter-sheet-visual-parity`
+
+recent_action: "076/003 filter CREATE landed+verified 7776ae7db: mutations red->green, gate 28/0, judge owed"
+
+**What this verifier confirmed** — the CREATE leg (`f52a6624d`, one summary row over a plain-canvas
+detail group per rule, its actions in a labelled group, the nested Not node answering with labelled
+rows on a sheet, no stylesheet rule touched) rebased onto `272b45194` and landed as **`7776ae7db`**.
+`origin/main` moved mid-rebase — the 0.0.41 release commit (`272b45194`) postdated the first fetch, so
+the rebase was re-run onto it — and the landed commit sits on that tip, not on the planning crossing
+the leg wrote against. Conflicts were resolved by kind: the generated artefacts
+(`screenshots/manifest.json`, eight `tools/live/*.json`) took main's side and were re-derived by their
+own writers; `tools/lane/css-lane.json` kept both sides' history append-only (565 entries, the leg's
+075-002 predecessors intact) with `baselineHash` reset to the sheet actually in the tree,
+**`41b124f19c2c`**; and the leg's pure re-stamp commit was dropped as empty because those artefacts
+are derived here anyway. Three mutations were re-run rather than trusted: the clause module's L3
+presence guard reverted reads RED (2 of its 6 tests fail), the renderer's `data-filter-detail-group`
+marker line reverted reads RED (1 of 10) and the companion's producer hunk reverted reads the lane
+RED at exactly the recorded numbers — `active-rule companion, unmarked markup: L1 max=1, L3 perRule=[0],
+L5 max=1` with the sheet and nested surfaces still green — each GREEN again on restore.
+
+**Battery, all exit 0 from the composed tree** — `npm run build`, `npx tsc --noEmit`, vitest
+**1623/1623** (161 files), `node tools/live/sheet-grammar.mjs` (2405 PASS rows, zero FAIL), the
+evidence lane **16/16 fresh**, both naming scans, and `npm run gate` **28 green, 0 red for a declared
+reason** — run twice, once before and once after the landing commit. Orchestrators `--strict`: the
+child, the `076` parent (first RESULT) and `005` all `RESULT: PASSED`, `005`'s metadata re-derived by
+its own backfill after the handover edit that followed. Captures re-judged by decoded pixel delta
+across two `npm run screenshots` passes (504/504, exit 0 both): **every picture hash unchanged**, the
+ten captures this packet's release names reproducing their committed bytes on the composed sheet, one
+capture moved bytes only (`components/constructed-board-title-format-filename-desktop-light`,
+650px at max channel delta 145 in one run, pixelHash `1e8a9c8fc707` / layoutHash `7c8c45cacd02`
+unchanged, 368057 → 368010) kept and named in the lane release, and one one-run jitter
+(`views/board-mobile-desktop-dark`, 1px at delta 1) restored to its committed 213420 with its manifest
+row patched back. Roadmap §5.A's child row re-derived at the final tree: `003/goal.md` = **0 ticked +
+10 open = 0% (0/10)**, no row ticked that names the operator or a device, while the row's prose now
+records the landing; the `076` parent figure re-certified unchanged at 9% (2/22). One environment
+receipt: the spec-remint pre-commit gate was bypassed with `SPECKIT_SKIP_SPEC_REMINT=1` because through
+the `.opencode` symlink `validate.sh` emits zero bytes and exits 0 (the same command through
+`$(realpath .opencode)` with `NODE_PRESERVE_SYMLINKS=1` emits its full 5618-byte JSON report), so the
+metadata was re-derived by hand with the same backfill tool the hook calls before the commit.
+
+**Still owed, nobody's-else** — T013's image judge (two consecutive eight-row passes at ≥14/16 with no
+zero on an unchanged tree) and T014's operator device row, which no agent may tick, plus T012's real-app
+keyboard cases and T009's own remainder: the comparator still edits in place inside its own detail row,
+and no value Edit/clear row exists. Per D8 no release ships this child's work before its own DONE.
 
 ### 2026-09-11 ~07:55, `076/002-properties-sheet-visual-parity` ITERATION-3 LANDED+VERIFIED (2736c2cda) — worktree `295-loop-002-properties-sheet-visual-parity`
 
