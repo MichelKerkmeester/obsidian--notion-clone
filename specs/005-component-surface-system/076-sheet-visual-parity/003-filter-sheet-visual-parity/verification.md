@@ -20,7 +20,7 @@ contextType: "implementation"
 
 **Packet:** 076-sheet-visual-parity/003-filter-sheet-visual-parity
 **Level:** 2
-**Status:** CREATE iteration 1 landed lane-green; the image judge has not run and the operator row is untouched
+**Status:** CREATE iteration 1 landed lane-green; iteration 1 JUDGE scored **3/16 with 5 zeros — fail**; remediation owed before the next judge pass; operator gate remains untouched
 **Date:** 2026-09-11
 **Loop graph:** `../decision-record.md` D6; `../plan.md` §6A "Running a child through the loop". This file is the VERIFY step's artefact (parent `spec.md` §5 step 5) and the record the JUDGE and REMEDIATE nodes write to.
 <!-- /ANCHOR:metadata -->
@@ -63,7 +63,7 @@ judge pass.
 
 | Iteration | SHA | Light capture | Dark capture | Frame | Sections | Row anatomy | Controls | Type | Spacing | Colour | Both themes | Total | Zeros | Verdict | Findings |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| _none yet_ | | | | | | | | | | | | | | | |
+| **1 (JUDGE)** | this commit | `screenshots/notion-clone/panels/constructed-filter-panel-sheet-mobile-light.png` | `constructed-filter-panel-sheet-mobile-dark.png` | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 1 | **3** | **5** | **fail** | `findings-1.md` |
 
 Each row is one JUDGE pass. The eight rubric columns hold a 0/1/2 score with a one-line
 justification carried into the Findings cell whenever the score is below 2. Total is the sum out of
@@ -71,12 +71,64 @@ justification carried into the Findings cell whenever the score is below 2. Tota
 points at `findings-<iter>.md` under the loop's scratch state on a fail (`plan.md` §6A). The child is
 not done in-repo until two consecutive rows both read `pass` on an unchanged tree.
 
-**No judge pass is recorded yet, and none is claimed.** Iteration 1 of this leg ran the lane and
-capture halves only: it can compute geometry and decoded pixel deltas, and it cannot see an image,
-so scoring the eight rows here would be fabrication. What it did prove is recorded as evidence on
-`tasks.md` T006-T011 — the RED baseline, the GREEN numbers, the moved captures and the battery exit
-codes — and what it did not prove is named there too (T009 partial, T012-T014 open). The first
-scored row in the table below is owed to a judging node that can open the PNGs.
+### Iteration 1 — JUDGE node's own pass
+
+Opened `constructed-filter-panel-sheet-mobile-{light,dark}.png` (804x2674, full sheet) and
+`constructed-active-rule-filter-mobile-{light,dark}.png` (companion), plus the named reference set:
+operator `0040-properties-card-container-rejected.png` and `0040-filter-property-picker-padding.png`,
+Notion `notion-ios-database-filters-{01,02,08}-*.webp`, and Anytype
+`anytype-mobile-sheet-filter-condition-text-light.png`. Both OUR captures share one defect: every
+detail control (`AND (all)`, `Field 3`, `equals`, `Backlog`, `Field 7`, `greater than`, `20`, `Field
+2`, `is not empty`) renders as its own bordered, rounded, filled pill — the same dropdown-box
+grammar the DELTA table names as the *before* state (spec.md §13.11), not the merged plain-canvas
+divider group the DEFINE and both reference families (Notion filters-08's `Title`/`Contains`/`Value
+… Edit` group; Anytype's icon-tile-plus-plain-text `Name`/`Is`/`Value` rows) show.
+
+- **Frame (0)** — Handle, centred `Filter` title and trailing `✕` match the target, but every
+  detail row sits inside its own white-on-light / dark-on-darker rounded rectangle — a second
+  painted surface on top of the plain sheet canvas. Parent D7's own rubric-impact clause is explicit:
+  "a card container around rows or values scores 0 on Frame regardless of how well it otherwise
+  matches the reference." This is a per-control container, not even the single whole-group card D7
+  was written to reject in `0040-properties-card-container-rejected.png` — it is the stricter
+  violation.
+- **Sections (0)** — All three rules render simultaneously expanded (summary row + full detail pills
+  + full action rows each), with uniform 1px hairline spacing throughout — no visible 16px
+  logical-group gap distinguishing summary from detail from actions, as the DEFINE and diagnosis-
+  table.md §2 require. No terminal `Delete filter` row/group appears anywhere in the full-sheet
+  capture; the sheet ends at `+ Add condition`. `Add rule group` / `Negate rule` / `Remove rule`
+  repeat identically per rule exactly as the *before* state's "repeated action rows" describes them
+  (spec.md §13.2), not the single rule-action/add-actions/Delete divider groups Notion filters-02
+  and this child's own §13.4 order describe.
+- **Row anatomy (1)** — Summary rows (`Field 3 · equals · Backlog`, icon + label + chevron) and
+  action rows (icon + label) match the target. The detail rows do not: `equals` and `Backlog` carry
+  no leading icon and are dropdown-shaped controls, not the label-plus-chevron/Edit navigation rows
+  spec.md §13.5 and Notion filters-08 show.
+- **Controls (0)** — `equals` renders as an inline comparator dropdown directly in the detail area,
+  and `Backlog` (the value) renders as an inline dropdown rather than opening a value editor. Both
+  are explicitly named exclusions in this rubric row's own text ("no inline comparator dropdown") and
+  in spec.md §13.6 ("only focused value editing is a full-width input").
+- **Type (1)** — Title weight/size and row-label sizing read consistent with the ladder and no helper
+  paragraph is visible under any field. The 13px sentence-case section label the Sections tier
+  requires (e.g. `Filter Group 1`, present in Notion filters-02) does not appear anywhere in either
+  capture.
+- **Spacing (0)** — Content inset reads consistent, but the detail pills carry their own corner
+  radius — spec.md §13.3 sets "content groups have no container radius or inset fill" and D7 assigns
+  radius to the shell only. No differentiated 16px-between-groups vs 1px-within-group rhythm is
+  visible; every row in the sheet uses the same spacing.
+- **Colour (0)** — The sheet canvas is one flat grey/dark tone as required, and destructive `Remove
+  rule` text is a legible red in both themes, but the detail pills paint a second surface fill (white
+  on light, lighter-dark on dark) directly on the sheet canvas — the same "bg container" the operator
+  named in `0040-properties-card-container-rejected.png` ("never use bg container like here for
+  values"), now recurring per control instead of per group.
+- **Both themes (1)** — Light and dark share identical order and geometry, and each theme's own
+  divider/destructive-red contrast is independently legible. Credit capped at 1 because both themes
+  carry the same plain-canvas-direction violation (the detail pills), so "one plain-canvas direction"
+  from this row's own text is not met in either theme.
+
+**Total 3/16, 5 zeros (Frame, Sections, Controls, Spacing, Colour) — fail**, on the total, the
+zero-row rule and by a wide margin. Findings recorded in `findings-1.md` for REMEDIATE. T009 on
+`tasks.md` already named this gap as "partial, deliberately not ticked" before this pass ran; this
+judge pass confirms the same gap from the rendered image rather than from DOM markers.
 <!-- /ANCHOR:iterations -->
 
 ---
