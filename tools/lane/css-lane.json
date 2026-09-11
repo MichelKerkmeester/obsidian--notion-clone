@@ -1,11 +1,6 @@
 {
-<<<<<<< HEAD
-  "holder": "076-sheet-visual-parity",
-  "baselineHash": "3a2f5143dd74",
-=======
   "holder": "076-002-properties-sheet-visual-parity",
-  "baselineHash": "9ac4d3858742",
->>>>>>> b1f552f4 (fix(sheets): properties fixture fits the judged frame; dark card fill takes its own step)
+  "baselineHash": "195782fd8370",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -7367,7 +7362,6 @@
       "note": "npm run screenshots </dev/null twice, 482/482, exit 0 both, judged by decoded pixel delta across both runs against the committed blobs (node scratchpad/glm/pixel-delta.mjs), no image opened by eye. 16 REAL movers, kept, every one reproduced across both judged runs: the 14 constructed/panel view-config, board-card-properties, settings-side-sheet and 2 cell-editor-text captures (maxDelta 112-195, changedPixels 75-530299) -- the merged tree re-renders 001-creators five-card settings sheet and the shared row shell whose committed bytes ours-side conflict resolution had taken from main. 1 one-run jitter (views/board-view-desktop-dark.png 6px@1, <=12) restored at its committed 248575 bytes with its manifest row patched (pixelHash be56588f7b1d unchanged, fresh styles.css sourceHash 3a2f5143dd74 kept). 0 threshold edits; the visual read stays the operator device pass. The 076/001 leg-creator own release above still carries the 20-mover judgement on its pre-rebase e34760384a34 tree."
     },
     {
-<<<<<<< HEAD
       "event": "acquire",
       "phase": "076-sheet-visual-parity",
       "at": "2026-09-11T01:52:42Z",
@@ -7410,45 +7404,18 @@
         "screenshots/notion-clone/panels/constructed-record-detail-sheet-mobile-light.png",
         "screenshots/notion-clone/panels/constructed-sort-panel-sheet-mobile-dark.png",
         "screenshots/notion-clone/panels/constructed-sort-panel-sheet-mobile-light.png",
-=======
-      "event": "release",
-      "phase": "076-002-properties-sheet-visual-parity",
-      "at": "2026-09-11T01:37:06.781Z",
-      "hash": "9ac4d3858742",
-      "note": "remediation edits, one step: the judged column-manager fixture answers to the judged phone frame (sixteen rows became ten, and the fixture now declares the titleField so the required column mounts with its disabled, dimmed eye — the judged photographs had clipped mid-list, past the hidden-section card, its bulk link and the add-property card) and the dark theme grouped-settings card declares its own 85% fill step instead of borrowing the 88% modal rung (that rung computes 11/255 above the 93% overlay canvas, which reads flat; 85% lifts 18/255, the bounded band light theme gives at 13/255; light theme untouched). Grammar gained the judged-frame fit clause and the both-themes card-step clause (floor 12/255) beside the hardened required-eye clause, all red before, green after: 0.5 vs 1 at 1 required of 10 rows, sheet 786.6px of the 874px judged viewport, card steps 18/255 dark and 12.75/255 light. Full corpus re-captured twice; 27 captures moved in BOTH runs (deterministic): the column-manager pair from the fixture, the seven settings-carded surfaces from the 57->64 fill, the view-config/settings/panel views from the same token, and two board views at 1-6px/1ch. Sizes, manifest and this entry re-derived together; evidence 16/16 fresh.",
-      "reviewed": [
-        "screenshots/notion-clone/fields/constructed-cell-editor-text-mobile-dark.png",
-        "screenshots/notion-clone/fields/constructed-cell-editor-text-mobile-light.png",
-        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-dark.png",
-        "screenshots/notion-clone/panels/constructed-column-manager-desktop-dark.png",
-        "screenshots/notion-clone/panels/constructed-column-manager-desktop-light.png",
-        "screenshots/notion-clone/panels/constructed-column-manager-mobile-dark.png",
-        "screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png",
-        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-mobile-dark.png",
-        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-mobile-light.png",
-        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-replaced-mobile-dark.png",
-        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-replaced-mobile-light.png",
-        "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-dark.png",
-        "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-light.png",
-        "screenshots/notion-clone/panels/constructed-modal-sheet-property-editor-stacked-mobile-dark.png",
-        "screenshots/notion-clone/panels/constructed-modal-sheet-property-editor-stacked-mobile-light.png",
->>>>>>> b1f552f4 (fix(sheets): properties fixture fits the judged frame; dark card fill takes its own step)
         "screenshots/notion-clone/panels/constructed-view-config-desktop-dark.png",
         "screenshots/notion-clone/panels/constructed-view-config-desktop-light.png",
         "screenshots/notion-clone/panels/constructed-view-config-mobile-dark.png",
         "screenshots/notion-clone/panels/constructed-view-config-mobile-light.png",
-<<<<<<< HEAD
         "screenshots/notion-clone/panels/constructed-view-config-sheet-mobile-dark.png",
         "screenshots/notion-clone/panels/constructed-view-config-sheet-mobile-light.png",
-=======
->>>>>>> b1f552f4 (fix(sheets): properties fixture fits the judged frame; dark card fill takes its own step)
         "screenshots/notion-clone/panels/panel-settings-side-sheet-desktop-dark.png",
         "screenshots/notion-clone/panels/panel-settings-side-sheet-desktop-light.png",
         "screenshots/notion-clone/panels/panel-view-config-desktop-dark.png",
         "screenshots/notion-clone/panels/panel-view-config-desktop-light.png",
         "screenshots/notion-clone/panels/panel-view-config-mobile-dark.png",
         "screenshots/notion-clone/panels/panel-view-config-mobile-light.png",
-<<<<<<< HEAD
         "screenshots/notion-clone/views/board-mobile-desktop-dark.png"
       ],
       "note": "npm run screenshots </dev/null twice, 504/504 entries, exit 0 both, judged by decoded pixel delta against the committed blobs (scratchpad/glm/pixel-delta.mjs) and per-capture HEAD-fingerprint probes; no image opened by eye. 14 movers kept: 13 by decoded-fine-delta (maxDelta 135-192, changedPixels 47-171), all but fields/constructed-cell-editor-text-mobile-light at its head pixelHash/layoutHash (byte-level only; that one moved true, pixelHash 0921a0a975d5 -> cb3a1efcaf8c at an unchanged 11c27f9a6372), plus views/board-mobile-desktop-dark, whose 1px@1 delta repeated its post-run bytes exactly on a third targeted pass, so it moved in both judged runs. 1 one-run jitter: views/board-view-desktop-dark 6px@1, third targeted pass returned the committed 248575 bytes, restored at those bytes with its manifest row patched (pixelHash be56588f7b1d, layoutHash 8a3e6fc3977c, fresh sourceHashes kept). 22 additions: the full-sheet judged captures, each an id-suffixed variant of its viewport shot (capture: sheet, the sheet expanded past its 90svh cap, recorded sheetHeight). 0 threshold edits; the visual read stays the operator device pass."
@@ -7480,11 +7447,66 @@
         "screenshots/notion-clone/components/panel-base-import-modal-desktop-dark.png"
       ],
       "note": "npm run screenshots </dev/null three times, 504/504, exit 0 each, judged by decoded pixel delta against the committed blobs (scratchpad/glm/pixel-delta.mjs), no image opened by eye. The rebase had taken main's side of the 25 conflicting artefacts, so the 22 judged full-sheet variant manifest entries were re-derived here; 4 REAL movers, each reproduced in both judged snapshots (post-run-2 and post-run-3 working trees): the two constructed-view-config-sheet-mobile variants (size differs -- the merged 3a2f5143dd74 tree renders the view-config sheet at new dimensions than the pre-rebase judged capture), panel-invalid-events-modal-desktop-dark 47px@192, views/board-view-desktop-dark 6px@1 (<=12 yet reproduced both judged snapshots, so kept, not restored). constructed-board-card-properties-hidden-desktop-light moved 127px@204 in the second run's product and reproduced its committed bytes on the third, so it carries no diff. 0 threshold edits; the visual read stays the operator device pass. Verification round 2, after this leg rebased onto the 0.0.40 release cut 25390149 (stylesheet unchanged, still 3a2f5143dd74): views/board-view-desktop-dark reproduced its committed bytes on the third pass, and components/panel-base-import-modal-desktop-dark moved 165px@59 (>12, kept)."
-=======
+    },
+    {
+      "event": "release",
+      "phase": "076-002-properties-sheet-visual-parity",
+      "at": "2026-09-11T01:37:06.781Z",
+      "hash": "9ac4d3858742",
+      "note": "remediation edits, one step: the judged column-manager fixture answers to the judged phone frame (sixteen rows became ten, and the fixture now declares the titleField so the required column mounts with its disabled, dimmed eye — the judged photographs had clipped mid-list, past the hidden-section card, its bulk link and the add-property card) and the dark theme grouped-settings card declares its own 85% fill step instead of borrowing the 88% modal rung (that rung computes 11/255 above the 93% overlay canvas, which reads flat; 85% lifts 18/255, the bounded band light theme gives at 13/255; light theme untouched). Grammar gained the judged-frame fit clause and the both-themes card-step clause (floor 12/255) beside the hardened required-eye clause, all red before, green after: 0.5 vs 1 at 1 required of 10 rows, sheet 786.6px of the 874px judged viewport, card steps 18/255 dark and 12.75/255 light. Full corpus re-captured twice; 27 captures moved in BOTH runs (deterministic): the column-manager pair from the fixture, the seven settings-carded surfaces from the 57->64 fill, the view-config/settings/panel views from the same token, and two board views at 1-6px/1ch. Sizes, manifest and this entry re-derived together; evidence 16/16 fresh.",
+      "reviewed": [
+        "screenshots/notion-clone/fields/constructed-cell-editor-text-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-cell-editor-text-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-replaced-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-replaced-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-property-editor-stacked-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-property-editor-stacked-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-view-config-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-view-config-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-view-config-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-view-config-mobile-light.png",
+        "screenshots/notion-clone/panels/panel-settings-side-sheet-desktop-dark.png",
+        "screenshots/notion-clone/panels/panel-settings-side-sheet-desktop-light.png",
+        "screenshots/notion-clone/panels/panel-view-config-desktop-dark.png",
+        "screenshots/notion-clone/panels/panel-view-config-desktop-light.png",
+        "screenshots/notion-clone/panels/panel-view-config-mobile-dark.png",
+        "screenshots/notion-clone/panels/panel-view-config-mobile-light.png",
         "screenshots/notion-clone/views/board-mobile-desktop-dark.png",
         "screenshots/notion-clone/views/board-view-desktop-dark.png"
       ]
->>>>>>> b1f552f4 (fix(sheets): properties fixture fits the judged frame; dark card fill takes its own step)
+    },
+    {
+      "event": "acquire",
+      "phase": "076-002-properties-sheet-visual-parity",
+      "at": "2026-09-11T02:37:26.000Z",
+      "hash": "195782fd8370",
+      "note": "landing-verify: the 001-settings crossing (60e68480) landed under this leg while it was being verified, so the landing replayed onto it; the replayed history's committed stylesheet reads 195782fd8370 = 001's 3a2f5143dd74 + this leg's 85% card-fill hunk (styles.css light :114 / dark :1044), and the lane is re-acquired against that committed composed stylesheet. The 9ac4d3858742 release above is this leg-creator's own pre-crossing judgement, kept as history, exactly as 001's landing kept ours."
+    },
+    {
+      "event": "edit",
+      "phase": "076-002-properties-sheet-visual-parity",
+      "at": "2026-09-11T02:37:26.000Z",
+      "hash": "195782fd8370",
+      "note": "the replayed remediation edit itself (454c14ad: the judged column-manager fixture at ten columns declaring the titleField, the dark theme's own 85% --obnotion-settings-card-fill step, the grammar's judged-frame-fit and both-themes-card-step clauses beside the hardened required-eye clause) -- recorded here because the crossing reordered the history around it; no further stylesheet bytes moved in this landing. 195782fd8370 = the composed tree's committed stylesheet; this release sits on it."
+    },
+    {
+      "event": "release",
+      "phase": "076-002-properties-sheet-visual-parity",
+      "at": "2026-09-11T02:37:26.000Z",
+      "hash": "195782fd8370",
+      "reviewed": [
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-replaced-mobile-light.png"
+      ],
+      "note": "npm run screenshots </dev/null twice on the composed tree, 482/482, exit 0 both; judged by decoded pixel delta across both runs against the committed blobs (node scratchpad/glm/pixel-delta.mjs), no image opened by eye. 0 content movers: 001's five-card mechanism paints its cards from its own backgrounds, so this leg's 85% token feeds only 002-creators surfaces, whose captures this leg's own 9751eb0f replay already carries. 1 bytes-only mover, named, judged: constructed-depth3-property-type-picker-replaced-mobile-light moved 560px at max channel delta 196 in BOTH runs (deterministic at the decoded-pixel level), pixelHash 663ea94baf36 and layoutHash unchanged - the recorded depth3-stack volatility (66707 <-> 67345 by run) - kept at its 67345 with the manifest row re-derived. 3 one-run jitters, judged, restored at their committed bytes with their manifest rows patched, pixelHash and layoutHash unchanged: components/chrome-owned-menu-sheet-mobile-light 9905px@2 (run 2 only, 38860), views/board-mobile-desktop-dark 1px@1 (run 2 only, 213422), views/board-view-desktop-dark 6px@1 (run 2 only, 248583) - the recorded 014/008/288/012 flip class, board-mobile now joining it. 0 threshold edits; the visual read stays the operator device pass."
     }
   ],
   "outstanding": [
@@ -7498,11 +7520,6 @@
     "The obnotion-board-* stylesheet family is now largely dead and was deliberately not cut here. The default board is the only board, and it builds obnotion-kanban-* markup; the extensions branch that built .obnotion-board-column, .obnotion-board-subgroup, .obnotion-board-add-column and their checkboxes is gone. Some of the family is still live and must survive any cut — .obnotion-board-card-cover and .obnotion-board-card-field are both built by the kanban card — so this is a per-rule audit, not a section delete, and it moves captures. One concrete consequence is already measurable: styles.css reads var(--obnotion-board-column-width, 220px) for .obnotion-board-column and nothing assigns that property any more, so the rule resolves its fallback for every user. It is dead rather than wrong, but it is exactly the class scan-pinned-values.mjs exists to catch, and it will stay invisible while the rule it belongs to is unreachable.",
     "067-sheet-family-remediation: seventeen captures on this lane still show the surface as it looked BEFORE the depth-cap fix at 173f7d3a. Found by 062's landing verifier, which recaptured on the merged tree and then measured decoded pixels rather than trusting pixelHash: panel-record-detail-sheet-body-empty-desktop-light moves 46,779 pixels at a max channel delta of 214, its dark pair 46,752 at 209, constructed-chart-toolbar-options-mobile-dark and constructed-column-manager-mobile-dark about 260,800 each at 45, and eleven more record-detail-sheet, modal-sheet-property-editor, depth3-dropdown and owned-menu-sheet captures between 10,548 and 42,211 pixels at 46 to 78. Every one of them hashes IDENTICALLY, which is why 173f7d3a's own recapture read them as byte-only re-encodes and restored them. pixelHash averages a 16x16 grid into 32 buckets, so any change confined to a narrow band or a small region moves a cell's average by less than one bucket and hashes the same - 062 hit the identical trap on its frozen-column shadow and fixed it by measuring pixels. Reproduced with 067's OWN stylesheet in the tree (identical counts), so this is 067's debt and not 062's: left restored here rather than recommitted, because reviewing another lane's surface is a review this packet cannot honestly sign. 067 owes a recapture measured by decoded pixel delta, and a read of each of the seventeen."
   ],
-<<<<<<< HEAD
-  "baselineCommit": "eacfe192f886",
-  "acquiredAt": "2026-09-11T01:52:42Z"
-=======
-  "baselineCommit": "dbb5e7cab7325518c9b3d00f995d41c9041a5e84",
-  "acquiredAt": "2026-09-11T01:37:06.781Z"
->>>>>>> b1f552f4 (fix(sheets): properties fixture fits the judged frame; dark card fill takes its own step)
+  "baselineCommit": "6da1b90d948ae2b94ec14b897733a94912a6b895",
+  "acquiredAt": "2026-09-11T03:21:40.000Z"
 }

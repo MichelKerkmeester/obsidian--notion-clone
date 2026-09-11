@@ -21,9 +21,11 @@ _memory:
       - "076/001 and 076/002 do not close until their frame-ruling remediation lands and re-judges (D7)"
       - "A release ships a 076 child's work only after that child's own DONE, not on CREATE/LAND (D8)"
     key_files:
+      - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
       - "specs/005-component-surface-system/071-sheet-notion-anytype-alignment/goal.md"
+      - "specs/008-calendar-timeline-chart-deprecation/goal.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "254-goal-refresh-0035"
@@ -43,6 +45,46 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-11 ~02:45, `076/001-settings-sheet-visual-parity` CREATE LANDED — worktree `292-loop-001-settings-sheet-visual-parity`
+
+**What this leg did** — a native Sonnet implementation leg (escalated after two GLM legs stalled)
+executed T004-T012: the five cards, the `renderNavRow`/`renderActionRow` primitives, the textarea
+path deleted, the ten over-80-character prose keys shortened in English, two new small surfaces the
+plugin never had before (`folder-suggest-modal.ts`, `modals/settings-sub-sheet-modal.ts`), and the
+Properties/Filters/Sorts summary rows wired to the same toggle the toolbar buttons already fire.
+`node tools/live/sheet-grammar.mjs` exits 0 (L1-L9 all green, L3 at exactly 13/19 qualifying rows);
+`npm run gate` reads 28/28 after the css-lane release naming every capture that moved. Two mid-build
+discoveries, both recorded rather than silently worked around: the render-assertion bundle's
+stubbed `obsidian` module (`tools/storybook/obsidian-stub.mjs`) only draws a real `<svg>` for an
+allowlisted icon set (four new icons added, one swapped to an existing alias) and its `Modal` export
+throws on construction — which is why R09 (Computed sync) stayed inline rather than following
+R04/R06 into a click-to-open sub-sheet, recorded in `verification.md`'s RED/GREEN register. Rebase
+onto `origin/main` (24 commits ahead) was skipped — the dirty tree's `styles.css`/`sheet-grammar.mjs`
+would conflict — left for the lander. Next: the image judge, twice consecutively on this tree, then
+the operator's own device read.
+### 2026-09-11 ~01:45, `076/002-properties-sheet-visual-parity` REMEDIATE leg (iteration 2) — worktree `295-loop-002-properties-sheet-visual-parity`
+
+**What this leg did** — took the judge's iteration-1 rows below 2 (Sections 1, Colour 0, Both themes 1)
+one clause at a time: clause RED against the judged fixture as it stood, producer, clause GREEN, then the
+corpus re-photographed twice and the judged captures sampled pixel-wise. **Sections**: the judged fixture
+ran sixteen rows past the 874px judged viewport, so the hidden-section card, its bulk link and the
+add-property card were never photographed — the fixture now carries ten rows and declares the
+`titleField`, which also fixes **Colour (b)**: the required column's eye now mounts disabled and dimmed
+(0.5 vs 1; the 0-disabled case, previously a printed N/A, is now a red clause). **Colour (a)/Both themes**:
+the dark grouped-settings card declares its own 85% fill step — 64 on the 46 canvas, 18/255, the bounded
+band light theme gives at 13/255 — instead of the 11/255 modal-rung borrow. That shared token is the
+settings packet's own ADR-K re-tune, landed here on its behalf; that packet's recorded current state
+(57-on-46) inherits and its own judge leg reconciles. New lane clauses: judged-frame fit (translation-
+invariant sheet height vs the judged viewport, both themes) and the both-themes 12/255 card-step floor;
+all red before, green after. The judged 804×1748 captures sampled: the hidden-section card at y=1500 and
+the add-property card at y=1690 read the card fill, so both grouping states are inside the judged frame.
+Grammar gains: judged-frame fit, both-themes card step, hardened required-eye; its light-theme read now
+swaps the host primary token so it measures the judged theme's relationship. The canvas token
+defect (46 vs the reference's 250,248,246) stays carried, settings-owned, untouched. 27 captures moved
+deterministically across both runs (15 at fingerprint, 12 bytes-only); lane release names all 15;
+evidence 16/16 fresh; gate 28/28; packet validation PASSED. **Owed: the judge's pass-2** (twice, unchanged
+tree) — the remediate leg's clause numbers prove the states, not the rubric score.
 
 ### 2026-09-10 ~23:12, `076/002-properties-sheet-visual-parity` DEFINE + PLAN LANDED — worktree `295-loop-002-properties-sheet-visual-parity`
 
@@ -5030,64 +5072,3 @@ interposes, the 074 testbed landing and the 289/015 fundamentals landing, the ti
 
 Docs: this entry, the continuity trio (`recent_action`/`last_updated_at`/`last_updated_by`), and the residue
 commits' own messages. Landed and pushed as `8f720b62`.
-
-    last_updated_at: "2026-09-11T02:06:20Z"
-    last_updated_by: "298-sheet-full-captures"
-    recent_action: "076 harness: 22 judged full-sheet variant shots + verify check, gate 28/0"
-    next_safe_action: "JUDGE scores 076/002 verification.md against 076/spec.md 5; REMEDIATE if any row <2"
-## 076-sheet-visual-parity — the capture-harness leg: every judged phone sheet photographs its whole height (2026-09-11, this leg)
-
-Both judged sheets had lost rubric points to the harness, not the plugin: the judged phone capture was `capture: "viewport"` (804x1748), so the lower cards — the settings sheet's C3-C5, the properties sheet's Hidden / add-property cards — never entered the 874 CSS px frame. This leg closed the gap at the source:
-
-- RED first: `tools/screenshots/verify.mjs` gained the judged-sheet check — eleven sheet scenarios (one per judged child; the ids are the sheets the children name as their judged mounts: view-config, column-manager, filter-panel, sort-panel, board-groups-panel, toolbar-add-view, modal-sheet-property-editor, record-detail, owned-menu, icon-picker, column-width-adjuster) must each carry a full-sheet variant `<id>-sheet-mobile-{light,dark}.png` whose PNG height equals twice the recorded `sheetHeight` (deviceScaleFactor 2, 2px slack). RED: `NO FULL-SHEET CAPTURE (22 of 22)`, exit 1, 0 of 11 sheets.
-- Then the harness: `tools/screenshots/capture.mjs` (importing the judged set from verify.mjs so one list cannot drift) shoots the variant beside the viewport shot — tallest `.obnotion-mobile-bottom-sheet`, its 90svh cap overridden inline-important, a 3-pass settle (sheets sizing inner areas against the very viewport the reshoot resizes), the page viewport grown to the sheet height, `waitForConstructedLayout` between passes, `capture: "sheet"` + `sheetHeight` recorded. Theme-blind/blank/freshness gates read the variant entries through their own ids unchanged. Trial: the view-config sheet is 2101px against the 874px viewport — the documented C3-C5 gap, now numeric.
-- Green: `npm run screenshots </dev/null` twice, 504/504 entries (482 + 22 additions), exit 0 both; `verify` exit 0 (no blank, none identical across themes, the 22 sheet x theme shots present at their recorded heights). Movers judged by decoded pixel delta against the committed blobs, no image opened by eye: 14 kept (13 fine-delta, 12 of them at their head pixelHash/layoutHash, byte-level only, plus fields/constructed-cell-editor-text-mobile-light moved true 0921a0a975d5 -> cb3a1efcaf8c at an unchanged 11c27f9a6372, plus views/board-mobile-desktop-dark whose 1px@1 third targeted pass reproduced its post-run bytes exactly); 1 one-run jitter restored, views/board-view-desktop-dark 6px@1, third targeted pass returning the committed 248575 bytes, manifest row patched with fresh sourceHashes kept (the 071/008 precedent). 9/9 sampled movers head-current, so the movement is run-to-run, never committed-capture staleness.
-- The css-lane: this leg's acquire/edit/release triplet, holder `076-sheet-visual-parity`, all three at `887e9e3b3449` (the stylesheet untouched); check-lane exit 0, `release names all 23 changed capture(s)`. The storybook inventory regenerated by its own writer (`sheet-inventory.mjs`, the +N capture counts the 22 additions move) — its 9 tests green, the only vitest casualty of the additions.
-- Battery: `tsc` 0, vitest 1617/1617, build 0, sheet-grammar 0, render-assertions 0, verify-placement 418/420 (2 red for a declared reason) exit 0, comments 0/0, failing-values 0, evidence 16/16 (capture-device-parity re-run by its own writer after the manifest), gate `PASS - 28 green, 0 red for a declared reason`, exit 0. Viewport captures unmoved at the pixelHash/layoutHash level; the 22 variant files are pure additions.
-- Docs: the 076 parent plan.md capture row names the variant as the judged image; the decision-record D2 note (added) records why, D2(b) unchanged — the variant photographs the same production mount, only uncropped; each of the eleven judged children's plan.md gained its judged-variant line. 076 then `RESULT: PASSED` after its scoped `backfill-graph-metadata.js` (the two GENERATED_METADATA errors were this leg's own doc edits, never hand-patched); the `005` track and `071/001` also `RESULT: PASSED` (the inventory edits ride this leg).
-
-Docs: this entry and the continuity trio. Commit pending; no push. The worktree's `.handover.md` stays unstaged.
-
-    last_updated_at: "2026-09-11T01:45:00Z"
-    last_updated_by: "295-loop-002-properties-sheet-visual-parity"
-    recent_action: "076/002 remediate a2146136: 3 rows red->green, 27 captures, gate 28/28; judge next"
-    next_safe_action: "JUDGE re-scores 076/002 (pass-2 owed) on a2146136's tree; REMEDIATE if any row <2 again"
-### 2026-09-11 ~02:45, `076/001-settings-sheet-visual-parity` CREATE LANDED — worktree `292-loop-001-settings-sheet-visual-parity`
-
-**What this leg did** — a native Sonnet implementation leg (escalated after two GLM legs stalled)
-executed T004-T012: the five cards, the `renderNavRow`/`renderActionRow` primitives, the textarea
-path deleted, the ten over-80-character prose keys shortened in English, two new small surfaces the
-plugin never had before (`folder-suggest-modal.ts`, `modals/settings-sub-sheet-modal.ts`), and the
-Properties/Filters/Sorts summary rows wired to the same toggle the toolbar buttons already fire.
-`node tools/live/sheet-grammar.mjs` exits 0 (L1-L9 all green, L3 at exactly 13/19 qualifying rows);
-`npm run gate` reads 28/28 after the css-lane release naming every capture that moved. Two mid-build
-discoveries, both recorded rather than silently worked around: the render-assertion bundle's
-stubbed `obsidian` module (`tools/storybook/obsidian-stub.mjs`) only draws a real `<svg>` for an
-allowlisted icon set (four new icons added, one swapped to an existing alias) and its `Modal` export
-throws on construction — which is why R09 (Computed sync) stayed inline rather than following
-R04/R06 into a click-to-open sub-sheet, recorded in `verification.md`'s RED/GREEN register. Rebase
-onto `origin/main` (24 commits ahead) was skipped — the dirty tree's `styles.css`/`sheet-grammar.mjs`
-would conflict — left for the lander. Next: the image judge, twice consecutively on this tree, then
-the operator's own device read.
-### 2026-09-11 ~01:45, `076/002-properties-sheet-visual-parity` REMEDIATE leg (iteration 2) — worktree `295-loop-002-properties-sheet-visual-parity`
-
-**What this leg did** — took the judge's iteration-1 rows below 2 (Sections 1, Colour 0, Both themes 1)
-one clause at a time: clause RED against the judged fixture as it stood, producer, clause GREEN, then the
-corpus re-photographed twice and the judged captures sampled pixel-wise. **Sections**: the judged fixture
-ran sixteen rows past the 874px judged viewport, so the hidden-section card, its bulk link and the
-add-property card were never photographed — the fixture now carries ten rows and declares the
-`titleField`, which also fixes **Colour (b)**: the required column's eye now mounts disabled and dimmed
-(0.5 vs 1; the 0-disabled case, previously a printed N/A, is now a red clause). **Colour (a)/Both themes**:
-the dark grouped-settings card declares its own 85% fill step — 64 on the 46 canvas, 18/255, the bounded
-band light theme gives at 13/255 — instead of the 11/255 modal-rung borrow. That shared token is the
-settings packet's own ADR-K re-tune, landed here on its behalf; that packet's recorded current state
-(57-on-46) inherits and its own judge leg reconciles. New lane clauses: judged-frame fit (translation-
-invariant sheet height vs the judged viewport, both themes) and the both-themes 12/255 card-step floor;
-all red before, green after. The judged 804×1748 captures sampled: the hidden-section card at y=1500 and
-the add-property card at y=1690 read the card fill, so both grouping states are inside the judged frame.
-Grammar gains: judged-frame fit, both-themes card step, hardened required-eye; its light-theme read now
-swaps the host primary token so it measures the judged theme's relationship. The canvas token
-defect (46 vs the reference's 250,248,246) stays carried, settings-owned, untouched. 27 captures moved
-deterministically across both runs (15 at fingerprint, 12 bytes-only); lane release names all 15;
-evidence 16/16 fresh; gate 28/28; packet validation PASSED. **Owed: the judge's pass-2** (twice, unchanged
-tree) — the remediate leg's clause numbers prove the states, not the rubric score.
